@@ -13,6 +13,10 @@ Only for `sys` targets (tested with `eval` and `hl`).
 - `DirectoryPath`: Directory path. The actual directory does not necessarily have to exist.
 - `DirectoryRef`: Represents a directory that actually exists.
 
+Internally:
+
+- All of these are just abstract based on `String`.
+- The path is automatically converted to absolute when creating any value of the types above.
 
 ## Compilation flags
 
