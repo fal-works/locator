@@ -1,0 +1,7 @@
+--class-path test
+--library sinker
+--library locator
+--main Main
+--dce full
+--macro nullSafety("locator", Strict)
+--debug
