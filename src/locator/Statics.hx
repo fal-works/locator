@@ -19,7 +19,10 @@ class Statics {
 		On windows, also replaces `/` by `\`.
 	**/
 	public static final quotePath = switch Sys.systemName() {
-			case "Windows": (s: String) -> SysTools.quoteWinArg(s.replace("/", "\\"), true);
+			case "Windows": (s: String) -> SysTools.quoteWinArg(
+					s.replace("/", "\\"),
+					true
+				);
 			default: SysTools.quoteUnixArg;
 		};
 
