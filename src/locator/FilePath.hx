@@ -60,6 +60,13 @@ abstract FilePath(PathString) to PathString {
 	}
 
 	/**
+		Saves `content` at `this` file path.
+		Be careful to use.
+	**/
+	public extern inline function saveContent(content: String): Void
+		return File.saveContent(this, content);
+
+	/**
 		For internal use.
 		Creates `FilePath` without checking the trailing delimiter.
 	**/

@@ -49,12 +49,6 @@ abstract FileRef(FilePath) {
 		return File.getContent(this);
 
 	/**
-		Saves `content` in `this` file.
-	**/
-	public extern inline function saveContent(content: String): Void
-		return File.saveContent(this, content);
-
-	/**
 		Copies `this` file to `destinationFilePath`.
 		Overwrites the destination file if it already exists.
 		@param prepareDirectory If `true`, creates the destination directory if absent.
