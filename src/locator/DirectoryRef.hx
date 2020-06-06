@@ -60,6 +60,14 @@ abstract DirectoryRef(DirectoryPath) {
 	}
 
 	/**
+		Sets `this` as current working directory.
+
+		(java) Not available on Java.
+	**/
+	public extern inline function setAsCurrent(): Void
+		Sys.setCwd(this);
+
+	/**
 		@return The path of `this` directory as `String`.
 	**/
 	public extern inline function toString(): String
