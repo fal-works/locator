@@ -31,7 +31,10 @@ abstract FileList(Data) from Data to Data {
 		if (prepareDirectory && !destinationPath.exists())
 			destinationPath.createDirectory();
 
-		for (i in 0...this.length)
-			File.copy(this[i].path, destinationPath);
+		for (i in 0...this.length) {
+			final file = this[i];
+			final destinationFilePath = destinationPath.makeFilePath(file.getName());
+			File.copy(file.path, destinationFilePath);
+		}
 	}
 }
