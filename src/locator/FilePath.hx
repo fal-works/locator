@@ -13,14 +13,13 @@ abstract FilePath(PathString) to PathString {
 
 	/**
 		Creates a new `FilePath` value.
-
-		(`#if locator_debug`) Throws error if `pathString` ends with any file path delimiter.
+		Throws error if `pathString` ends with any file path delimiter.
 		@param pathString Either absolute or relative from the current working directory.
 	**/
 	@:access(locator.PathString)
 	@:from public static extern inline function from(pathString: PathString) {
-		#if locator_debug
-		if (pathString.endsWithDelimiter()) throw "Not a file: " + pathString;
+		#if !locator_validation_disable
+		if (pathString.endsWithDelimiter()) throw "Not a file path: " + pathString;
 		#end
 		return new FilePath(pathString);
 	}

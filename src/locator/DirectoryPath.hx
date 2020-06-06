@@ -41,14 +41,13 @@ abstract DirectoryPath(PathString) to PathString {
 
 	/**
 		Concats `this` and `relPathString`, and creates a new `DirectoryPath` value.
-
-		(`#if locator_debug`) Throws error if an absolute path is passed.
+		Throws error if an absolute path is passed.
 
 		(java) Not available on Java.
 		@param relPathString Relative path of a directory from `this` directory path.
 	**/
 	public extern inline function concat(relPathString: String): DirectoryPath {
-		#if locator_debug
+		#if !locator_validation_disable
 		if (Path.isAbsolute(relPathString))
 			throw "Cannot concat absolute path: " + relPathString;
 		#end
@@ -61,14 +60,13 @@ abstract DirectoryPath(PathString) to PathString {
 
 	/**
 		Concats `this` and `relPathString`, and creates a new `FilePath` value.
-
-		(`#if locator_debug`) Throws error if an absolute path is passed.
+		Throws error if an absolute path is passed.
 
 		(java) Not available on Java.
 		@param relPathString Relative path of a file from `this` directory path.
 	**/
 	public extern inline function makeFilePath(relPathString: String): FilePath {
-		#if locator_debug
+		#if !locator_validation_disable
 		if (Path.isAbsolute(relPathString))
 			throw "Cannot concat absolute path: " + relPathString;
 		#end

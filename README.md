@@ -24,7 +24,7 @@ Internally:
 
 |flag|description|
 |---|---|
-|locator_debug|Enables validation of file/directory path. Automatically set if `--debug`.|
+|locator_validation_disable|Skips validation of file/directory paths.|
 
 
 ## Dependencies

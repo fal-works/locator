@@ -18,11 +18,10 @@ abstract FileRef(FilePath) {
 
 	/**
 		Creates a `FileRef` value.
-
-		(`#if locator_debug`) Throws error if the file does not exist.
+		Throws error if the file does not exist.
 	**/
 	@:from public static extern inline function fromPath(path: FilePath): FileRef {
-		#if locator_debug
+		#if !locator_validation_disable
 		if (!path.exists())
 			throw "File not found: " + path;
 		#end
@@ -31,8 +30,7 @@ abstract FileRef(FilePath) {
 
 	/**
 		Creates a `FileRef` value from a string.
-
-		(`#if locator_debug`) Throws error if the file does not exist.
+		Throws error if the file does not exist.
 	**/
 	public static extern inline function from(s: String): FileRef
 		return fromPath(FilePath.from(s));

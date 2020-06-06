@@ -3,6 +3,5 @@
 --library sinker
 --main Main
 --dce full
---macro locator.internal.Initialization.run()
 --macro nullSafety("locator", Strict)
 --debug

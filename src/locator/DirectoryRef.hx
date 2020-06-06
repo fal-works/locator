@@ -20,11 +20,10 @@ abstract DirectoryRef(DirectoryPath) {
 
 	/**
 		Creates a `DirectoryRef` value.
-
-		(`#if locator_debug`) Throws error if the directory does not exist.
+		Throws error if the directory does not exist.
 	**/
 	@:from public static extern inline function fromPath(path: DirectoryPath) {
-		#if locator_debug
+		#if !locator_validation_disable
 		if (!FileSystem.exists(path)) throw "Directory not found: " + path;
 		if (!FileSystem.isDirectory(path)) throw "Directory not accessible: " + path;
 		#end
@@ -33,8 +32,7 @@ abstract DirectoryRef(DirectoryPath) {
 
 	/**
 		Creates a `DirectoryRef` value from a string.
-
-		(`#if locator_debug`) Throws error if the directory does not exist.
+		Throws error if the directory does not exist.
 	**/
 	public static extern inline function from(s: String)
 		return fromPath(DirectoryPath.from(s));
