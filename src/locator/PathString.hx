@@ -20,16 +20,22 @@ abstract PathString(String) to String {
 
 	#if locator_windows
 	static final backslash = "\\";
+	static final backslashCode = "\\".code;
 	#end
 
 	/**
 		Converts `s` to `PathString`.
 	**/
 	@:from public static extern inline function from(s: String): PathString {
-		var absolutePath = FileSystem.absolutePath(s.trim());
+		final lastCharCode = s.charCodeAt(s.length - 1);
+		final lastDelimiter = lastCharCode == delimiterCode #if locator_windows || lastCharCode == backslashCode #end;
+
+		var absolutePath = FileSystem.absolutePath(s.trim()); // This drops the trailing delimiter
 		#if locator_windows
 		absolutePath = absolutePath.replace(backslash, delimiter);
 		#end
+		if (lastDelimiter) absolutePath += delimiter;
+
 		return new PathString(absolutePath);
 	}
 
