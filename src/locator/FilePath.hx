@@ -4,12 +4,12 @@ package locator;
 	Normalized absolute file path based on `String`.
 	The actual file does not have to exist.
 **/
-@:notNull
-abstract FilePath(String) to String {
+@:notNull @:forward
+abstract FilePath(PathString) to PathString {
 	/**
 		Callback function for `FilePath.from()`.
 	**/
-	public static final createCallback = (s: String) -> FilePath.from(s);
+	public static final createCallback = (s: PathString) -> FilePath.from(s);
 
 	/**
 		Creates a new `FilePath` value.
@@ -17,10 +17,10 @@ abstract FilePath(String) to String {
 		(`#if locator_debug`) Throws error if `pathString` ends with any file path delimiter.
 		@param pathString Either absolute or relative from the current working directory.
 	**/
-	@:from public static extern inline function from(pathString: String) {
-		pathString = normalizePathString(pathString.trim());
+	@:access(locator.PathString)
+	@:from public static extern inline function from(pathString: PathString) {
 		#if locator_debug
-		if (pathString.endsWith(pathDelimiter)) throw "Not a file: " + pathString;
+		if (pathString.endsWithDelimiter()) throw "Not a file: " + pathString;
 		#end
 		return new FilePath(pathString);
 	}
@@ -32,39 +32,16 @@ abstract FilePath(String) to String {
 		return if (a.exists()) a else b;
 
 	/**
-		Creates a new `haxe.io.Path` instance.
-	**/
-	@:to public extern inline function toPathObject(): Path
-		return new Path(this);
-
-	/**
 		Finds the actual file.
 	**/
 	public extern inline function find(): FileRef
-		return FileRef.from(this);
-
-	/**
-		@return `true` if `this` directory exists.
-	**/
-	public extern inline function exists(): Bool
-		return FileSystem.exists(this);
+		return FileRef.fromPath(this);
 
 	/**
 		@return `this` if it exists. Otherwise `defaultPath`.
 	**/
 	public extern inline function or(defaultPath: FilePath): FilePath
 		return coalesce(new FilePath(this), defaultPath);
-
-	/**
-		@return The directory path where `this` file is located.
-	**/
-	@:access(locator.DirectoryPath)
-	public extern inline function getDirectoryPath(): DirectoryPath {
-		return new DirectoryPath(this.substr(
-			0,
-			this.getLastIndexOfSlash().unwrap() + 1
-		));
-	}
 
 	/**
 		@return The file name without directory.
@@ -83,15 +60,9 @@ abstract FilePath(String) to String {
 	}
 
 	/**
-		@return Quoted path.
-	**/
-	public extern inline function quote(): String
-		return this.quote();
-
-	/**
 		For internal use.
-		Creates `FilePath` without normalizing.
+		Creates `FilePath` without checking the trailing delimiter.
 	**/
-	extern inline function new(path: String)
+	extern inline function new(path: PathString)
 		this = path;
 }

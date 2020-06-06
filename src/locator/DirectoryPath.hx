@@ -1,11 +1,11 @@
 package locator;
 
 /**
-	Normalized absolute directory path based on `String`.
+	Normalized absolute directory path based on `PathString`.
 	The actual directory does not have to exist.
 **/
-@:notNull
-abstract DirectoryPath(String) to String {
+@:notNull @:forward
+abstract DirectoryPath(PathString) to PathString {
 	/**
 		Callback function for `DirectoryPath.from()`.
 	**/
@@ -13,33 +13,31 @@ abstract DirectoryPath(String) to String {
 
 	/**
 		Creates a new `DirectoryPath` value.
-		@param pathString Either absolute or relative from the current working directory.
-		If not provided, returns the current working directory.
+		@param pathString If not provided, returns the current working directory.
 	**/
-	@:from public static extern inline function from(pathString: String) {
-		pathString = normalizePathString(pathString);
-		if (!pathString.endsWith(pathDelimiter)) pathString += pathDelimiter;
+	@:access(locator.PathString)
+	@:from public static extern inline function from(pathString: PathString) {
+		if (!pathString.endsWithDelimiter())
+			pathString = pathString.add(PathString.delimiter);
 		return new DirectoryPath(pathString);
 	}
 
 	/**
 		@return New `DirectoryPath` value from the current working directory.
 	**/
+	@:access(locator.PathString)
 	public static extern inline function current() {
-		return new DirectoryPath(normalizePathDelimiter(Sys.getCwd()));
+		return new DirectoryPath(PathString.fromAbsolute(Sys.getCwd()));
 	}
 
 	/**
 		@return `a` if it exists. Otherwise `b`.
 	**/
-	public static extern inline function coalesce(a: FilePath, b: FilePath): FilePath
+	public static extern inline function coalesce(
+		a: DirectoryPath,
+		b: DirectoryPath
+	): DirectoryPath
 		return if (a.exists()) a else b;
-
-	/**
-		Creates a new `haxe.io.Path` instance.
-	**/
-	@:to public extern inline function toPathObject(): Path
-		return new Path(this);
 
 	/**
 		Concats `this` and `relPathString`, and creates a new `DirectoryPath` value.
@@ -88,12 +86,6 @@ abstract DirectoryPath(String) to String {
 		return DirectoryRef.from(this);
 
 	/**
-		@return `true` if `this` directory exists.
-	**/
-	public extern inline function exists(): Bool
-		return FileSystem.exists(this);
-
-	/**
 		Creates the actual directory.
 	**/
 	@:access(locator.DirectoryRef)
@@ -109,15 +101,9 @@ abstract DirectoryPath(String) to String {
 		return coalesce(new DirectoryPath(this), defaultPath);
 
 	/**
-		@return Quoted path.
-	**/
-	public extern inline function quote(): String
-		return Statics.quote(this);
-
-	/**
 		For internal use.
-		Creates `DirectoryPath` without normalizing.
+		Creates `DirectoryPath` without appending delimiter.
 	**/
-	extern inline function new(path: String)
+	extern inline function new(path: PathString)
 		this = path;
 }

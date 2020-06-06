@@ -13,7 +13,7 @@ class Main {
 		final altFilePath = cwdPath.makeFilePath("test/testdata.txt");
 		if (filePath != altFilePath) throw '$filePath != $altFilePath';
 		Sys.println('file: $filePath');
-		Sys.println('  dir: ${filePath.getDirectoryPath()}');
+		Sys.println('  dir: ${filePath.getParentPath()}');
 		Sys.println('  name: ${filePath.getName()}');
 		Sys.println('  ext: ${filePath.getExtension()}');
 		Sys.println('  quoted: ${filePath.quote()}');

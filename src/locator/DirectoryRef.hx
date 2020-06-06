@@ -4,11 +4,14 @@ package locator;
 	Value referring to an existing directory.
 **/
 @:notNull
+@:forward(getParentPath, concat, makeFilePath)
 abstract DirectoryRef(DirectoryPath) {
 	/**
 		Callback function for `DirectoryRef.from(path: DirectoryPath)`.
 	**/
-	public static final createCallback = (path: DirectoryPath) -> DirectoryRef.from(path);
+	public static final createCallback = (
+		path: DirectoryPath
+	) -> DirectoryRef.fromPath(path);
 
 	/**
 		Callback function for `DirectoryRef.from(s: String)`.
@@ -20,13 +23,21 @@ abstract DirectoryRef(DirectoryPath) {
 
 		(`#if locator_debug`) Throws error if the directory does not exist.
 	**/
-	@:from public static extern inline function from(path: DirectoryPath) {
+	@:from public static extern inline function fromPath(path: DirectoryPath) {
 		#if locator_debug
 		if (!FileSystem.exists(path)) throw "Directory not found: " + path;
 		if (!FileSystem.isDirectory(path)) throw "Directory not accessible: " + path;
 		#end
 		return new DirectoryRef(path);
 	}
+
+	/**
+		Creates a `DirectoryRef` value from a string.
+
+		(`#if locator_debug`) Throws error if the directory does not exist.
+	**/
+	public static extern inline function from(s: String)
+		return fromPath(DirectoryPath.from(s));
 
 	/**
 		@return New `DirectoryRef` value for the current working directory.
@@ -39,6 +50,14 @@ abstract DirectoryRef(DirectoryPath) {
 		The path of `this` directory.
 	**/
 	public var path(get, never): DirectoryPath;
+
+	/**
+		@return The parent directory of `this`.
+	**/
+	@:access(locator.DirectoryRef)
+	public extern inline function getParent(): DirectoryRef {
+		return new DirectoryRef(this.getParentPath());
+	}
 
 	/**
 		@return The path of `this` directory as `String`.

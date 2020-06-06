@@ -4,12 +4,12 @@ package locator;
 	Value referring to an existing file.
 **/
 @:notNull
-@:forward(getDirectoryPath, getName, getExtension)
+@:forward(getParentPath, getName, getExtension)
 abstract FileRef(FilePath) {
 	/**
 		Callback function for `FileRef.from()`.
 	**/
-	public static final createCallback = (path: FilePath) -> FileRef.from(path);
+	public static final createCallback = (path: FilePath) -> FileRef.fromPath(path);
 
 	/**
 		Callback function for `FileRef.from(s: String)`.
@@ -21,13 +21,21 @@ abstract FileRef(FilePath) {
 
 		(`#if locator_debug`) Throws error if the file does not exist.
 	**/
-	@:from public static extern inline function from(path: FilePath) {
+	@:from public static extern inline function fromPath(path: FilePath): FileRef {
 		#if locator_debug
 		if (!path.exists())
 			throw "File not found: " + path;
 		#end
 		return new FileRef(path);
 	}
+
+	/**
+		Creates a `FileRef` value from a string.
+
+		(`#if locator_debug`) Throws error if the file does not exist.
+	**/
+	public static extern inline function from(s: String): FileRef
+		return fromPath(FilePath.from(s));
 
 	/**
 		The path of `this` file.
@@ -57,11 +65,11 @@ abstract FileRef(FilePath) {
 	}
 
 	/**
-		@return The directory where `this` file is located.
+		@return The parent directory of `this`.
 	**/
 	@:access(locator.DirectoryRef)
-	public extern inline function getDirectory(): DirectoryRef {
-		return new DirectoryRef(this.getDirectoryPath());
+	public extern inline function getParent(): DirectoryRef {
+		return new DirectoryRef(this.getParentPath());
 	}
 
 	/**
