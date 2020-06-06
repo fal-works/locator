@@ -28,13 +28,14 @@ abstract PathString(String) to String {
 	**/
 	@:from public static extern inline function from(s: String): PathString {
 		final lastCharCode = s.charCodeAt(s.length - 1);
-		final lastDelimiter = lastCharCode == delimiterCode #if locator_windows || lastCharCode == backslashCode #end;
+		final hasLastDelimiter = lastCharCode == delimiterCode #if locator_windows || lastCharCode == backslashCode #end;
 
-		var absolutePath = FileSystem.absolutePath(s.trim()); // This drops the trailing delimiter
+		var absolutePath = FileSystem.absolutePath(s.trim()); // This may drop the trailing delimiter
 		#if locator_windows
 		absolutePath = absolutePath.replace(backslash, delimiter);
 		#end
-		if (lastDelimiter) absolutePath += delimiter;
+		if (hasLastDelimiter && !stringEndsWithDelimiter(absolutePath))
+			absolutePath += delimiter;
 
 		return new PathString(absolutePath);
 	}
@@ -48,6 +49,12 @@ abstract PathString(String) to String {
 		#end
 		return new PathString(s);
 	}
+
+	/**
+		@return `true` if `s` ends with a path delimiter.
+	**/
+	static extern inline function stringEndsWithDelimiter(s: String): Bool
+		return s.charCodeAt(s.length - 1) == delimiterCode;
 
 	/**
 		@return `true` if `this` file or directory exists.
@@ -94,7 +101,7 @@ abstract PathString(String) to String {
 		@return `true` if `this` ends with a path delimiter.
 	**/
 	extern inline function endsWithDelimiter(): Bool
-		return this.charCodeAt(this.length - 1) == delimiterCode;
+		return stringEndsWithDelimiter(this);
 
 	/**
 		For internal use.
