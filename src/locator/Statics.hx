@@ -7,36 +7,30 @@ import haxe.SysTools;
 **/
 class Statics {
 	/**
-		Quotes `s` if needed, depending on the current system (either Windows or other).
+		Path delimiter used for internal representation of locator types.
 	**/
-	public static final quote = switch Sys.systemName() {
-			case "Windows": (s: String) -> SysTools.quoteWinArg(s, true);
-			default: SysTools.quoteUnixArg;
-		};
+	public static final pathDelimiter = "/";
 
 	/**
-		Quotes `s` if needed, depending on the current system (either Windows or other).
-		On windows, also replaces `/` by `\`.
+		@return String that can be used as a single command line argument on the current OS.
 	**/
-	public static final quotePath = switch Sys.systemName() {
-			case "Windows": (s: String) -> SysTools.quoteWinArg(
-					s.replace("/", "\\"),
-					true
-				);
-			default: SysTools.quoteUnixArg;
-		};
+	public static extern inline function quote(s: String): String {
+		#if locator_windows
+		return SysTools.quoteWinArg(s.replace("/", "\\"), true);
+		#else
+		return SysTools.quoteUnixArg(s);
+		#end
+	}
 
 	/**
-		Absolutizes `path` and replaces backslash with slash.
+		Replaces `/` by `\`.
 	**/
-	@:noUsing
-	public static extern inline function normalize(path: String): String
-		return normalizeSlash(FileSystem.absolutePath(path));
+	public static extern inline function normalizePathDelimiter(s: String): String
+		return s.replace("\\", "/");
 
 	/**
-		Replaces backslash with slash.
+		Normalizes slash/backslash and also absolutizes the path.
 	**/
-	@:noUsing
-	public static extern inline function normalizeSlash(path: String): String
-		return path.replace("\\", "/");
+	public static extern inline function normalizePathString(path: String): String
+		return normalizePathDelimiter(FileSystem.absolutePath(path));
 }

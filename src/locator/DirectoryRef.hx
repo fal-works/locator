@@ -17,7 +17,8 @@ abstract DirectoryRef(DirectoryPath) {
 
 	/**
 		Creates a `DirectoryRef` value.
-		Throws error if the directory does not exist.
+
+		(`#if locator_debug`) Throws error if the directory does not exist.
 	**/
 	@:from public static extern inline function from(path: DirectoryPath) {
 		#if locator_debug

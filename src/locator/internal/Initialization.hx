@@ -13,6 +13,11 @@ class Initialization {
 		#if (debug && !locator_debug)
 		Compiler.define("locator_debug", "1");
 		#end
+
+		#if !locator_windows
+		if (Sys.systemName() == "Windows")
+			Compiler.define("locator_windows", "1");
+		#end
 	}
 }
 #end

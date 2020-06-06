@@ -18,7 +18,8 @@ abstract FileRef(FilePath) {
 
 	/**
 		Creates a `FileRef` value.
-		Throws error if the file does not exist.
+
+		(`#if locator_debug`) Throws error if the file does not exist.
 	**/
 	@:from public static extern inline function from(path: FilePath) {
 		#if locator_debug

@@ -17,8 +17,8 @@ abstract DirectoryPath(String) to String {
 		If not provided, returns the current working directory.
 	**/
 	@:from public static extern inline function from(pathString: String) {
-		pathString = normalize(pathString);
-		if (!pathString.endsWith("/")) pathString += "/";
+		pathString = normalizePathString(pathString);
+		if (!pathString.endsWith(pathDelimiter)) pathString += pathDelimiter;
 		return new DirectoryPath(pathString);
 	}
 
@@ -26,7 +26,7 @@ abstract DirectoryPath(String) to String {
 		@return New `DirectoryPath` value from the current working directory.
 	**/
 	public static extern inline function current() {
-		return new DirectoryPath(normalizeSlash(Sys.getCwd()));
+		return new DirectoryPath(normalizePathDelimiter(Sys.getCwd()));
 	}
 
 	/**
@@ -43,7 +43,8 @@ abstract DirectoryPath(String) to String {
 
 	/**
 		Concats `this` and `relPathString`, and creates a new `DirectoryPath` value.
-		Throws error if an absolute path is passed.
+
+		(`#if locator_debug`) Throws error if an absolute path is passed.
 
 		(java) Not available on Java.
 		@param relPathString Relative path of a directory from `this` directory path.
@@ -62,7 +63,8 @@ abstract DirectoryPath(String) to String {
 
 	/**
 		Concats `this` and `relPathString`, and creates a new `FilePath` value.
-		Throws error if an absolute path is passed.
+
+		(`#if locator_debug`) Throws error if an absolute path is passed.
 
 		(java) Not available on Java.
 		@param relPathString Relative path of a file from `this` directory path.
@@ -110,7 +112,7 @@ abstract DirectoryPath(String) to String {
 		@return Quoted path.
 	**/
 	public extern inline function quote(): String
-		return this.quotePath();
+		return Statics.quote(this);
 
 	/**
 		For internal use.

@@ -11,24 +11,18 @@ abstract FilePath(String) to String {
 	**/
 	public static final createCallback = (s: String) -> FilePath.from(s);
 
-	#if locator_debug
-	/**
-		Regular expression for any string ending with `/` or `\`.
-	**/
-	static final endsWithSlashLike = ~/[\.\/\\]$/i;
-	#end
-
 	/**
 		Creates a new `FilePath` value.
-		Throws error if `pathString` ends with any file path delimiter.
+
+		(`#if locator_debug`) Throws error if `pathString` ends with any file path delimiter.
 		@param pathString Either absolute or relative from the current working directory.
 	**/
 	@:from public static extern inline function from(pathString: String) {
-		pathString = pathString.trim();
+		pathString = normalizePathString(pathString.trim());
 		#if locator_debug
-		if (endsWithSlashLike.match(pathString)) throw "Not a file: " + pathString;
+		if (pathString.endsWith(pathDelimiter)) throw "Not a file: " + pathString;
 		#end
-		return new FilePath(normalize(pathString));
+		return new FilePath(pathString);
 	}
 
 	/**
@@ -92,7 +86,7 @@ abstract FilePath(String) to String {
 		@return Quoted path.
 	**/
 	public extern inline function quote(): String
-		return this.quotePath();
+		return this.quote();
 
 	/**
 		For internal use.
