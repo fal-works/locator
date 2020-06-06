@@ -55,24 +55,41 @@ abstract FileRef(FilePath) {
 		return File.saveContent(this, content);
 
 	/**
-		Copies `this` file to `destinationPath`.
+		Copies `this` file to `destinationFilePath`.
 		Overwrites the destination file if it already exists.
+		@param prepareDirectory If `true`, creates the destination directory if absent.
 		@return New `FileRef` value for the destination file.
 	**/
-	public extern inline function copy(destinationPath: FilePath): FileRef {
-		File.copy(this, destinationPath);
-		return new FileRef(destinationPath);
+	public extern inline function copy(
+		destinationFilePath: FilePath,
+		prepareDirectory = true
+	): FileRef {
+		if (prepareDirectory) {
+			final destination = destinationFilePath.getParentPath();
+			if (!destination.exists()) destination.createDirectory();
+		}
+
+		File.copy(this, destinationFilePath);
+		return new FileRef(destinationFilePath);
 	}
 
 	/**
-		Copies `this` file to `destination` with the same file name.
+		Copies `this` file to `destinationPath` with the same file name.
 		Overwrites the destination file if it already exists.
+		@param prepareDirectory If `true`, creates the destination directory if absent.
 		@return New `FileRef` value for the destination file.
 	**/
-	public extern inline function copyTo(destination: DirectoryRef): FileRef {
-		final destinationPath = destination.makeFilePath(this.getName());
-		File.copy(this, destinationPath);
-		return new FileRef(destinationPath);
+	public extern inline function copyTo(
+		destinationPath: DirectoryPath,
+		prepareDirectory = true
+	): FileRef {
+		if (prepareDirectory && !destinationPath.exists())
+			destinationPath.createDirectory();
+
+		final destinationFilePath = destinationPath.makeFilePath(this.getName());
+
+		File.copy(this, destinationFilePath);
+		return new FileRef(destinationFilePath);
 	}
 
 	/**
