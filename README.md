@@ -2,9 +2,9 @@
 
 File system utility for Haxe.
 
-Requires **Haxe 4** (tested with 4.1.1).
-Only for `sys` targets (tested with `eval` and `hl`).
+Requires **Haxe 4**. Only for `sys` targets.
 
+(Tested with: Haxe 4.1.1, `eval`/`hl`. Some methods are not available on `java`).
 
 ## Types
 
@@ -20,10 +20,12 @@ Internally:
 - All of these (except `FileList`) are just abstract based on `String`.
 - The path is automatically converted to absolute when creating any value of the types above.
 
+
 ## Compilation flags
 
 |flag|description|
 |---|---|
+|locator_windows|Uses backslash for path delimiter. Automatically set on Windows.|
 |locator_validation_disable|Skips validation of file/directory paths.|
 
 
