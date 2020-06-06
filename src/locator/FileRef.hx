@@ -65,6 +65,17 @@ abstract FileRef(FilePath) {
 	}
 
 	/**
+		Copies `this` file to `destination` with the same file name.
+		Overwrites the destination file if it already exists.
+		@return New `FileRef` value for the destination file.
+	**/
+	public extern inline function copyTo(destination: DirectoryRef): FileRef {
+		final destinationPath = destination.makeFilePath(this.getName());
+		File.copy(this, destinationPath);
+		return new FileRef(destinationPath);
+	}
+
+	/**
 		@return The parent directory of `this`.
 	**/
 	@:access(locator.DirectoryRef)
