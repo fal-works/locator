@@ -38,6 +38,13 @@ abstract FilePath(PathString) to PathString {
 		return FileRef.fromPath(this);
 
 	/**
+		Tries to find the actual file.
+	**/
+	@:access(locator.FileRef)
+	public extern inline function tryFind(): Maybe<FileRef>
+		return if (this.exists()) Maybe.from(new FileRef(this)) else Maybe.none();
+
+	/**
 		@return `this` if it exists. Otherwise `defaultPath`.
 	**/
 	public extern inline function or(defaultPath: FilePath): FilePath

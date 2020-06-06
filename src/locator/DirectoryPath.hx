@@ -86,6 +86,13 @@ abstract DirectoryPath(PathString) to PathString {
 		return DirectoryRef.from(this);
 
 	/**
+		Tries to find the actual file.
+	**/
+	@:access(locator.DirectoryRef)
+	public extern inline function tryFind(): Maybe<DirectoryRef>
+		return if (this.exists()) Maybe.from(new DirectoryRef(this)) else Maybe.none();
+
+	/**
 		Creates the actual directory.
 	**/
 	@:access(locator.DirectoryRef)
