@@ -60,6 +60,21 @@ abstract FilePath(PathString) to PathString {
 	}
 
 	/**
+		@return The file name without directory and extension.
+	**/
+	public extern inline function getNameWithoutExtension(): String
+		return getName().sliceBeforeLastDot();
+
+	/**
+		@param ext Extension without dot, e.g. `txt`.
+		@return New `FilePath` value with the given extension.
+	**/
+	@:access(locator.PathString)
+	public extern inline function setExtension(ext: String): FilePath {
+		return new FilePath(new PathString('${this.sliceBeforeLastDot()}.$ext'));
+	}
+
+	/**
 		Saves `content` at `this` file path.
 		Be careful to use.
 	**/
