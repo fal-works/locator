@@ -60,6 +60,40 @@ abstract DirectoryRef(DirectoryPath) {
 	}
 
 	/**
+		Tries to find a file specified by `relativePath`.
+	**/
+	public extern inline function tryFindFile(relativePath: String): Maybe<FileRef>
+		return this.makeFilePath(relativePath).tryFind();
+
+	/**
+		Finds a file specified by `relativePath`.
+		Throws error if not found.
+	**/
+	public extern inline function findFile(relativePath: String): FileRef {
+		final path = this.makeFilePath(relativePath);
+		final maybeFile = path.tryFind();
+		if (maybeFile.isNone()) throw 'File not found: $path';
+		return maybeFile.unwrap();
+	}
+
+	/**
+		Tries to find a directory specified by `relativePath`.
+	**/
+	public extern inline function tryFindDirectory(relativePath: String): Maybe<DirectoryRef>
+		return this.concat(relativePath).tryFind();
+
+	/**
+		Finds a directory specified by `relativePath`.
+		Throws error if not found.
+	**/
+	public extern inline function findDirectory(relativePath: String): DirectoryRef {
+		final path = this.concat(relativePath);
+		final maybeDir = path.tryFind();
+		if (maybeDir.isNone()) throw 'Directory not found: $path';
+		return maybeDir.unwrap();
+	}
+
+	/**
 		Sets `this` as current working directory.
 
 		(java) Not available on Java.
