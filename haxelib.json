@@ -4,9 +4,9 @@
 	"license": "MIT",
 	"tags": ["utility", "sys"],
 	"description": "File system utility.",
-	"version": "0.2.0-alpha",
+	"version": "0.2.0",
 	"classPath": "src/",
-	"releasenote": "",
+	"releasenote": "Refactor. Add some features.",
 	"contributors": [
 		"fal-works"
 	],
