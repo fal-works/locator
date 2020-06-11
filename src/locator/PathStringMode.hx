@@ -1,3 +1,9 @@
 package locator;
 
-typedef PathStringMode = greeter.CommandLineInterface.CliType;
+/**
+	Mode of `PathStringMode`.
+	This is just an alias for `greeter.CommandLineInterfaceType`.
+
+	@see `PathString.mode`
+**/
+typedef PathStringMode = greeter.CommandLineInterfaceType;
