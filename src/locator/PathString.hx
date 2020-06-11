@@ -1,8 +1,8 @@
 package locator;
 
 import haxe.SysTools;
-import greeter.CommandLineInterface as CLI;
-import greeter.CommandLineInterfaceSet as CLIs;
+import greeter.CommandLineInterface as Cli;
+import greeter.CommandLineInterfaceSet as CliSet;
 
 using StringTools;
 
@@ -22,7 +22,7 @@ abstract PathString(String) to String {
 		- If `Unix`: `/` is interpreted as delimiter and `\` is treated as just a character with no special meaning.
 		- If `Dos`: Both `/` and `\` are interpreted as delimiter and then unified to `\`.
 	**/
-	public static var mode(default, set): PathStringMode = CLI.current.type;
+	public static var mode(default, set): PathStringMode = Cli.current.type;
 
 	/**
 		Path delimiter used for internal representation of `PathString`.
@@ -46,7 +46,7 @@ abstract PathString(String) to String {
 		The CLI that corresponts to the current `mode`.
 		Automatically set according to `mode`.
 	**/
-	static var cli: CLI = CLI.current;
+	static var cli: Cli = Cli.current;
 
 	/**
 		Converts `s` to `PathString`.
@@ -74,11 +74,11 @@ abstract PathString(String) to String {
 	static inline function set_mode(mode: PathStringMode): PathStringMode {
 		switch mode {
 			case Unix:
-				cli = CLIs.unix;
+				cli = CliSet.unix;
 				delimiter = Char.slash;
 				delimiterCode = "/".code;
 			case Dos:
-				cli = CLIs.dos;
+				cli = CliSet.dos;
 				delimiter = Char.backslash;
 				delimiterCode = "\\".code;
 		}
@@ -137,7 +137,7 @@ abstract PathString(String) to String {
 		If not provided, determined according to the current `PathString.mode`.
 		@return String that can be used as a single command line argument on `cli`.
 	**/
-	public inline function quoteForCli(?cli: CLI): String {
+	public inline function quoteForCli(?cli: Cli): String {
 		return switch (if (cli != null) cli.type else mode) {
 			case Unix:
 				if (getMode() == Dos) throw 'Cannot use path ${this} for Unix CLI.';
