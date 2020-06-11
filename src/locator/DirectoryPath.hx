@@ -4,8 +4,8 @@ package locator;
 	Normalized absolute directory path based on `PathString`.
 	The actual directory does not have to exist.
 **/
-@:notNull @:forward(exists, getMode, isAvailableInCli, quoteForCli, toPathObject, getParentPath)
-abstract DirectoryPath(PathString) to PathString {
+@:notNull @:forward(exists, getMode, isAvailableInCli, quoteForCli, toPathObject, toString, getParentPath)
+abstract DirectoryPath(PathString) to String {
 	/**
 		Callback function for `DirectoryPath.from()`.
 	**/

@@ -99,9 +99,10 @@ abstract PathString(String) to String {
 		For avoiding error, manually check with `isAvailableInCli()` before quoting.
 	**/
 	public inline function quoteForCli(?targetCli: Cli): String {
-		if (targetCli != null && !isAvailableInCli(targetCli))
+		final mode = getMode();
+		if (targetCli != null && mode.cliType != targetCli.type)
 			throw 'Path ${this} cannot be used in ${targetCli.name}';
-		return getMode().cli.quoteArgument(this);
+		return mode.cli.quoteArgument(this);
 	}
 
 	/**
@@ -129,6 +130,12 @@ abstract PathString(String) to String {
 	**/
 	public extern inline function sliceAfterLastDelimiter(): String
 		return this.substr(this.getLastIndexOf(getMode().delimiter).int() + 1);
+
+	/**
+		Casts `this` to `String`.
+	**/
+	public extern inline function toString()
+		return this;
 
 	/**
 		For internal use.

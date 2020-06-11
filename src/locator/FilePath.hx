@@ -4,8 +4,8 @@ package locator;
 	Normalized absolute file path based on `String`.
 	The actual file does not have to exist.
 **/
-@:notNull @:forward(exists, getMode, isAvailableInCli, quoteForCli, toPathObject, getParentPath)
-abstract FilePath(PathString) to PathString {
+@:notNull @:forward(exists, getMode, isAvailableInCli, quoteForCli, toPathObject, toString, getParentPath)
+abstract FilePath(PathString) to String {
 	/**
 		Callback function for `FilePath.from()`.
 	**/
