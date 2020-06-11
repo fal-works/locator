@@ -7,7 +7,16 @@ import greeter.Cli;
 	The actual directory does not have to exist.
 **/
 @:notNull
-@:forward(length, exists, getMode, toRelative, isAvailableInCli, quote, toPathObject, toString)
+@:forward(
+	length,
+	exists,
+	getMode,
+	toRelative,
+	isAvailableInCli,
+	quote,
+	toPathObject,
+	toString
+)
 abstract DirectoryPath(PathString) to String {
 	/**
 		Callback function for `DirectoryPath.from()`.
@@ -65,8 +74,15 @@ abstract DirectoryPath(PathString) to String {
 	@:access(locator.DirectoryPath)
 	public inline function getName(): String {
 		final length = this.length;
-		final newStartPos = this.getLastIndexOf(this.getMode().delimiter, length - 2).int() + 1;
-		return if (newStartPos == 0) this else this.substring(newStartPos, length - 1);
+		final newStartPos = this.getLastIndexOf(
+			this.getMode().delimiter,
+			length - 2
+		).int()
+			+ 1;
+		return if (newStartPos == 0) this else this.substring(
+			newStartPos,
+			length - 1
+		);
 	}
 
 	/**
@@ -75,8 +91,15 @@ abstract DirectoryPath(PathString) to String {
 	**/
 	@:access(locator.DirectoryPath)
 	public inline function getParentPath(): Maybe<DirectoryPath> {
-		final newLength = this.getLastIndexOf(this.getMode().delimiter, this.length - 2).int() + 1;
-		return if (newLength == 0) Maybe.none() else Maybe.from(new DirectoryPath(this.substr(0, newLength)));
+		final newLength = this.getLastIndexOf(
+			this.getMode().delimiter,
+			this.length - 2
+		).int()
+			+ 1;
+		return if (newLength == 0) Maybe.none() else Maybe.from(new DirectoryPath(this.substr(
+			0,
+			newLength
+		)));
 	}
 
 	/**

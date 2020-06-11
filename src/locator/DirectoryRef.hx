@@ -80,7 +80,9 @@ abstract DirectoryRef(DirectoryPath) {
 	/**
 		Tries to find a directory specified by `relativePath`.
 	**/
-	public extern inline function tryFindDirectory(relativePath: String): Maybe<DirectoryRef>
+	public extern inline function tryFindDirectory(
+		relativePath: String
+	): Maybe<DirectoryRef>
 		return this.concat(relativePath).tryFind();
 
 	/**

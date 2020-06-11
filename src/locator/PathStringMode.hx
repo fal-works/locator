@@ -47,7 +47,12 @@ class PathStringMode {
 	**/
 	public final delimiterCode: Int;
 
-	public function new(cli: Cli, cliType: CliType, delimiter: String, delimiterCode: Int) {
+	public function new(
+		cli: Cli,
+		cliType: CliType,
+		delimiter: String,
+		delimiterCode: Int
+	) {
 		this.cli = cli;
 		this.cliType = cliType;
 		this.delimiter = delimiter;
