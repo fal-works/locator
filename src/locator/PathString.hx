@@ -4,6 +4,8 @@ import haxe.SysTools;
 import greeter.CommandLineInterface as CLI;
 import greeter.CommandLineInterfaceSet as CLIs;
 
+using StringTools;
+
 /**
 	String that represents a path to any file or directory.
 	Always absolute.
@@ -57,7 +59,7 @@ abstract PathString(String) to String {
 
 		if (mode == Dos) {
 			hasLastDelimiter = hasLastDelimiter || lastCharCode == Char.backslashCode;
-			absolutePath = absolutePath.replace(Char.slash, Char.backslash);
+			absolutePath = formatAbsoluteDos(absolutePath);
 		}
 
 		if (hasLastDelimiter && !stringEndsWithDelimiter(absolutePath))
@@ -84,10 +86,19 @@ abstract PathString(String) to String {
 	}
 
 	/**
+		Formats `s` assuming that it is an absolute path on DOS.
+		@return `s` with delimiters unified to backslash and first character changed to upper case.
+	**/
+	static inline function formatAbsoluteDos(s: String): String {
+		s = s.replace(Char.slash, Char.backslash);
+		return s.charAt(0).toUpperCase() + s.substr(1);
+	}
+
+	/**
 		Converts `s` to `PathString`, assuming `s` is an absolute path.
 	**/
 	static inline function fromAbsolute(s: String): PathString {
-		if (mode == Dos) s = s.replace(Char.slash, Char.backslash);
+		if (mode == Dos) s = formatAbsoluteDos(s);
 		return new PathString(s);
 	}
 
