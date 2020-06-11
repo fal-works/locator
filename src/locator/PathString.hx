@@ -143,10 +143,14 @@ abstract PathString(String) to String {
 		Returns a `String` that can be used as a single command line argument
 		on the CLI that corresponds to the `PathStringMode` in which `this` was created.
 
-		Check with `isAvailableInCli()` before caling this, if needed.
+		@param targetCli If provided, checks if `this` matches the target CLI and throws error if not.
+		For avoiding error, manually check with `isAvailableInCli()` before quoting.
 	**/
-	public inline function quoteForCli(): String
+	public inline function quoteForCli(?targetCli: Cli): String {
+		if (targetCli != null && !isAvailableInCli(targetCli))
+			throw 'Path ${this} cannot be used in ${targetCli.name}';
 		return getMode().getCli().quoteArgument(this);
+	}
 
 	/**
 		Creates a new `haxe.io.Path` instance.
