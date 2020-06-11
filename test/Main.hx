@@ -21,7 +21,10 @@ class Main {
 		Sys.println('\n------------------------\n${file.getContent()}\n------------------------');
 
 		Sys.println("\nGet parent recursively:");
-		var path = filePath.getParentPath().getParentPath();
+		final leafDirPathStr = filePath.getParentPath();
+		// PathString.mode = PathStringMode.unix;
+		// final leafDirPathStr = "/usr/local/bin/include/aaa/";
+		var path = DirectoryPath.from(leafDirPathStr).getParentPath();
 		var safetyCount = 0;
 		while (path.isSome()) {
 			final curPath = path.unwrap();
