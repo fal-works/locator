@@ -1,5 +1,7 @@
 package locator;
 
+import greeter.Cli;
+
 /**
 	Normalized absolute directory path based on `PathString`.
 	The actual directory does not have to exist.
@@ -123,6 +125,14 @@ abstract DirectoryPath(PathString) to String {
 	**/
 	public extern inline function or(defaultPath: DirectoryPath): DirectoryPath
 		return coalesce(new DirectoryPath(this), defaultPath);
+
+	/**
+		Checks if `cli` matches the mode in which `this` was created. If not, throws an error.
+		@return `this`
+	**/
+	public inline function validateForCli(cli: Cli): DirectoryPath {
+		return new DirectoryPath(this.validateForCli(cli));
+	}
 
 	/**
 		For internal use.

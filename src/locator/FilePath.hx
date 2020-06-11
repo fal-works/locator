@@ -1,5 +1,7 @@
 package locator;
 
+import greeter.Cli;
+
 /**
 	Normalized absolute file path based on `String`.
 	The actual file does not have to exist.
@@ -102,6 +104,14 @@ abstract FilePath(PathString) to String {
 	**/
 	public extern inline function saveContent(content: String): Void
 		return File.saveContent(this, content);
+
+	/**
+		Checks if `cli` matches the mode in which `this` was created. If not, throws an error.
+		@return `this`
+	**/
+	public inline function validateForCli(cli: Cli): FilePath {
+		return new FilePath(this.validateForCli(cli));
+	}
 
 	/**
 		For internal use.

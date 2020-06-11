@@ -81,6 +81,15 @@ abstract PathString(String) to String {
 		return getMode().cliType == cli.type;
 
 	/**
+		Checks if `cli` matches the mode in which `this` was created. If not, throws an error.
+		@return `this`
+	**/
+	public inline function validateForCli(cli: Cli): PathString {
+		if (!isAvailableInCli(cli)) throw 'Path ${this} cannot be used in ${cli.name}';
+		return this;
+	}
+
+	/**
 		Returns a `String` that can be used as a single command line argument
 		on the CLI that corresponds to the `PathStringMode` in which `this` was created.
 
