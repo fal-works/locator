@@ -126,6 +126,13 @@ abstract PathString(String) to String {
 	}
 
 	/**
+		Tells in which mode `this` path was created.
+		`Unix` if the first character is a slash, otherwise `Dos`.
+	**/
+	public inline function getMode(): PathStringMode
+		return if (this.charCodeAt(0) == Char.slashCode) Unix else Dos;
+
+	/**
 		@return String that can be used as a single command line argument on the current OS.
 	**/
 	public inline function quote(): String {
