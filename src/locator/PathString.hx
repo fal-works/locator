@@ -75,7 +75,7 @@ abstract PathString(String) to String {
 	/**
 		Tells if `cli` matches the mode in which `this` was created.
 
-		If `false` returned, `this` path cannot be used in `cli` even if the path is quoted with `this.quoteForCli()`.
+		If `false` returned, `this` path cannot be used in `cli` even if the path is quoted with `this.quote()`.
 	**/
 	public inline function isAvailableInCli(cli: Cli): Bool
 		return getMode().cliType == cli.type;
@@ -87,7 +87,7 @@ abstract PathString(String) to String {
 		@param targetCli If provided, checks if `this` matches the target CLI and throws error if not.
 		For avoiding error, manually check with `isAvailableInCli()` before quoting.
 	**/
-	public inline function quoteForCli(?targetCli: Cli): String {
+	public inline function quote(?targetCli: Cli): String {
 		final mode = getMode();
 		if (targetCli != null && mode.cliType != targetCli.type)
 			throw 'Path ${this} cannot be used in ${targetCli.name}';
