@@ -25,13 +25,13 @@ Internally:
 
 |flag|description|
 |---|---|
-|locator_windows|Uses backslash for path delimiter. Automatically set on Windows.|
 |locator_validation_disable|Skips validation of file/directory paths.|
 
 
 ## Dependencies
 
-- [sinker](https://github.com/fal-works/sinker) v0.2.0 or compatible
+- [sinker](https://github.com/fal-works/sinker) v0.3.0 or compatible
+- [greeter](https://github.com/fal-works/greeter) v0.1.0 or compatible
 
 See also:
 [FAL Haxe libraries](https://github.com/fal-works/fal-haxe-libraries)

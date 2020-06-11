@@ -1,39 +1,65 @@
 package locator;
 
 import haxe.SysTools;
+import greeter.CommandLineInterface as CLI;
+import greeter.CommandLineInterfaceSet as CLIs;
 
 /**
 	String that represents a path to any file or directory.
-	Always absolute. On Windows, the path delimiter is unified to slash `/`.
+	Always absolute.
+	Depending on `mode`, the path delimiter characters may be unified.
 **/
 @:forward
 abstract PathString(String) to String {
 	/**
-		Path delimiter used for internal representation of `PathString`.
+		Current mode (either `Unix` or `Dos`) for interpreting an arbitrary string as a path.
+
+		At default this is set according to the current system on which the program is running.
+
+		When interpreting a `String` value:
+		- If `Unix`: `/` is interpreted as delimiter and `\` is treated as just a character with no special meaning.
+		- If `Dos`: Both `/` and `\` are interpreted as delimiter and then unified to `\`.
 	**/
-	public static final delimiter = "/";
+	public static var mode(default, set): PathStringMode = CLI.current.type;
+
+	/**
+		Path delimiter used for internal representation of `PathString`.
+		Automatically set according to `mode`.
+	**/
+	static var delimiter: String = switch mode {
+			case Unix: Char.slash;
+			case Dos: Char.backslash;
+		};
 
 	/**
 		Character code of `delimiter`.
+		Automatically set according to `mode`.
 	**/
-	static extern inline final delimiterCode = "/".code;
+	static var delimiterCode: Int = switch mode {
+			case Unix: Char.slashCode;
+			case Dos: Char.backslashCode;
+		};
 
-	#if locator_windows
-	static final backslash = "\\";
-	static final backslashCode = "\\".code;
-	#end
+	/**
+		The CLI that corresponts to the current `mode`.
+		Automatically set according to `mode`.
+	**/
+	static var cli: CLI = CLI.current;
 
 	/**
 		Converts `s` to `PathString`.
 	**/
-	@:from public static extern inline function from(s: String): PathString {
+	@:from public static inline function from(s: String): PathString {
+		s = s.trim();
 		final lastCharCode = s.charCodeAt(s.length - 1);
-		final hasLastDelimiter = lastCharCode == delimiterCode #if locator_windows || lastCharCode == backslashCode #end;
+		var hasLastDelimiter = lastCharCode == Char.slashCode; // First check slash here
+		var absolutePath = FileSystem.absolutePath(s); // This may drop the trailing delimiter
 
-		var absolutePath = FileSystem.absolutePath(s.trim()); // This may drop the trailing delimiter
-		#if locator_windows
-		absolutePath = absolutePath.replace(backslash, delimiter);
-		#end
+		if (mode == Dos) {
+			hasLastDelimiter = hasLastDelimiter || lastCharCode == Char.backslashCode;
+			absolutePath = absolutePath.replace(Char.slash, Char.backslash);
+		}
+
 		if (hasLastDelimiter && !stringEndsWithDelimiter(absolutePath))
 			absolutePath += delimiter;
 
@@ -41,12 +67,27 @@ abstract PathString(String) to String {
 	}
 
 	/**
+		Sets `PathString.mode` and other depending variables.
+	**/
+	static inline function set_mode(mode: PathStringMode): PathStringMode {
+		switch mode {
+			case Unix:
+				cli = CLIs.unix;
+				delimiter = Char.slash;
+				delimiterCode = "/".code;
+			case Dos:
+				cli = CLIs.dos;
+				delimiter = Char.backslash;
+				delimiterCode = "\\".code;
+		}
+		return PathString.mode = mode;
+	}
+
+	/**
 		Converts `s` to `PathString`, assuming `s` is an absolute path.
 	**/
-	static extern inline function fromAbsolute(s: String): PathString {
-		#if locator_windows
-		s = s.replace(backslash, delimiter);
-		#end
+	static inline function fromAbsolute(s: String): PathString {
+		if (mode == Dos) s = s.replace(Char.slash, Char.backslash);
 		return new PathString(s);
 	}
 
@@ -66,22 +107,24 @@ abstract PathString(String) to String {
 		@return Path of the parent directory of `this`.
 	**/
 	@:access(locator.DirectoryPath)
-	public extern inline function getParentPath(): DirectoryPath {
+	public inline function getParentPath(): DirectoryPath {
 		return new DirectoryPath(this.substr(
 			0,
-			this.getLastIndexOfSlash().unwrap() + 1
+			this.getLastIndexOf(delimiter).unwrap() + 1
 		));
 	}
 
 	/**
 		@return String that can be used as a single command line argument on the current OS.
 	**/
-	public extern inline function quote(): String {
-		#if locator_windows
-		return SysTools.quoteWinArg(this.replace(delimiter, backslash), true);
-		#else
-		return SysTools.quoteUnixArg(this);
-		#end
+	public inline function quote(): String {
+		return switch mode {
+			case Unix: SysTools.quoteUnixArg(this);
+			case Dos: SysTools.quoteWinArg(
+					this.replace(Char.slash, Char.backslash),
+					true
+				);
+		}
 	}
 
 	/**
@@ -91,17 +134,24 @@ abstract PathString(String) to String {
 		return new Path(this);
 
 	/**
-		Adds `s` to `this` without checking delimiters.
-	**/
-	extern inline function add(s: String): PathString {
-		return new PathString(this + s);
-	}
-
-	/**
 		@return `true` if `this` ends with a path delimiter.
 	**/
 	extern inline function endsWithDelimiter(): Bool
 		return stringEndsWithDelimiter(this);
+
+	/**
+		@return `this` if it has already a trailing delimiter.
+		Otherwise a new `PathString` with trailing delimiter appended.
+	**/
+	extern inline function addTrailingDelimiter(): PathString {
+		return if (endsWithDelimiter()) this else new PathString(this + PathString.delimiter);
+	}
+
+	/**
+		@return Sub-string after the last occurrence of `delimiter`.
+	**/
+	extern inline function sliceAfterLastDelimiter(): String
+		return this.substr(this.getLastIndexOf(delimiter).int() + 1);
 
 	/**
 		For internal use.
@@ -109,4 +159,11 @@ abstract PathString(String) to String {
 	**/
 	extern inline function new(s: String)
 		this = s;
+}
+
+private class Char {
+	public static inline final slash = "/";
+	public static inline final slashCode = "/".code;
+	public static inline final backslash = "\\";
+	public static inline final backslashCode = "\\".code;
 }

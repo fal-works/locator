@@ -22,9 +22,7 @@ abstract DirectoryPath(PathString) to PathString {
 	**/
 	@:access(locator.PathString)
 	@:from public static extern inline function from(pathString: PathString) {
-		if (!pathString.endsWithDelimiter())
-			pathString = pathString.add(PathString.delimiter);
-		return new DirectoryPath(pathString);
+		return new DirectoryPath(pathString.addTrailingDelimiter());
 	}
 
 	/**

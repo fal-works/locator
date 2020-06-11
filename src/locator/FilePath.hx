@@ -57,8 +57,9 @@ abstract FilePath(PathString) to PathString {
 	/**
 		@return The file name without directory.
 	**/
+	@:access(locator.PathString)
 	public extern inline function getName(): String
-		return this.sliceAfterLastSlash();
+		return this.sliceAfterLastDelimiter();
 
 	/**
 		@return The extension of `this` file path (if exists).

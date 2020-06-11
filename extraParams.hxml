@@ -1,4 +1,4 @@
 # Default parameters for haxelib
 
 --library sinker
---macro locator.internal.Initialization.run()
+--library greeter

@@ -1,8 +1,8 @@
 --class-path src
 --class-path test
 --library sinker
+--library greeter
 --main Main
 --dce full
---macro locator.internal.Initialization.run()
 --macro nullSafety("locator", Strict)
 --debug
