@@ -122,7 +122,10 @@ abstract PathString(String) to String {
 		Otherwise a new `PathString` with trailing delimiter appended.
 	**/
 	public extern inline function addTrailingDelimiter(): PathString {
-		return if (endsWithDelimiter()) this else new PathString(this + getMode().delimiter);
+		final mode = getMode();
+		return if (this.lastCharCode() == mode.delimiterCode) this else {
+			new PathString(this + mode.delimiter);
+		};
 	}
 
 	/**
