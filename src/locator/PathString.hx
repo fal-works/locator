@@ -133,15 +133,18 @@ abstract PathString(String) to String {
 		return if (this.charCodeAt(0) == Char.slashCode) Unix else Dos;
 
 	/**
-		@return String that can be used as a single command line argument on the current OS.
+		@param cli The CLI on which the result string is to be used.
+		If not provided, determined according to the current `PathString.mode`.
+		@return String that can be used as a single command line argument on `cli`.
 	**/
-	public inline function quote(): String {
-		return switch mode {
-			case Unix: SysTools.quoteUnixArg(this);
-			case Dos: SysTools.quoteWinArg(
-					this.replace(Char.slash, Char.backslash),
-					true
-				);
+	public inline function quoteForCli(?cli: CLI): String {
+		return switch (if (cli != null) cli.type else mode) {
+			case Unix:
+				if (getMode() == Dos) throw 'Cannot use path ${this} for Unix CLI.';
+				SysTools.quoteUnixArg(this);
+			case Dos:
+				if (getMode() == Unix) throw 'Cannot use path ${this} for Unix CLI.';
+				SysTools.quoteWinArg(this, true);
 		}
 	}
 
