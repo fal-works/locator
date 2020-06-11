@@ -19,5 +19,7 @@ class Main {
 		Sys.println('  quoted: ${filePath.quoteForCli()}');
 		final file = filePath.find();
 		Sys.println('\n------------------------\n${file.getContent()}\n------------------------');
+
+		Sys.println(filePath.getParentPath().getParentPath());
 	}
 }

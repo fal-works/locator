@@ -35,7 +35,7 @@ abstract PathString(String) to String {
 			absolutePath = formatAbsoluteDos(absolutePath);
 		}
 
-		if (hasLastDelimiter && !stringEndsWithDelimiter(absolutePath))
+		if (hasLastDelimiter && absolutePath.lastCharCode() != mode.delimiterCode)
 			absolutePath += mode.delimiter;
 
 		return new PathString(absolutePath);
@@ -59,12 +59,6 @@ abstract PathString(String) to String {
 	}
 
 	/**
-		@return `true` if `s` ends with a path delimiter.
-	**/
-	static extern inline function stringEndsWithDelimiter(s: String): Bool
-		return s.charCodeAt(s.length - 1) == mode.delimiterCode;
-
-	/**
 		@return `true` if `this` file or directory exists.
 	**/
 	public extern inline function exists(): Bool
@@ -77,7 +71,7 @@ abstract PathString(String) to String {
 	public inline function getParentPath(): DirectoryPath {
 		return new DirectoryPath(this.substr(
 			0,
-			this.getLastIndexOf(mode.delimiter).unwrap() + 1
+			this.getLastIndexOf(getMode().delimiter).unwrap() + 1
 		));
 	}
 
@@ -119,21 +113,21 @@ abstract PathString(String) to String {
 		@return `true` if `this` ends with a path delimiter.
 	**/
 	extern inline function endsWithDelimiter(): Bool
-		return stringEndsWithDelimiter(this);
+		return this.lastCharCode() == getMode().delimiterCode;
 
 	/**
 		@return `this` if it has already a trailing delimiter.
 		Otherwise a new `PathString` with trailing delimiter appended.
 	**/
 	extern inline function addTrailingDelimiter(): PathString {
-		return if (endsWithDelimiter()) this else new PathString(this + mode.delimiter);
+		return if (endsWithDelimiter()) this else new PathString(this + getMode().delimiter);
 	}
 
 	/**
 		@return Sub-string after the last occurrence of `delimiter`.
 	**/
 	extern inline function sliceAfterLastDelimiter(): String
-		return this.substr(this.getLastIndexOf(mode.delimiter).int() + 1);
+		return this.substr(this.getLastIndexOf(getMode().delimiter).int() + 1);
 
 	/**
 		For internal use.
