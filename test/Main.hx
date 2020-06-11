@@ -24,8 +24,9 @@ class Main {
 		var path = filePath.getParentPath().getParentPath();
 		var safetyCount = 0;
 		while (path.isSome()) {
-			Sys.println(path.unwrap());
-			path = path.unwrap().getParentPath();
+			final curPath = path.unwrap();
+			Sys.println('${curPath} : ${curPath.getName()}');
+			path = curPath.getParentPath();
 			if (100 < ++safetyCount) throw "Something is wrong.";
 		}
 	}

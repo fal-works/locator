@@ -4,7 +4,7 @@ package locator;
 	Value referring to an existing directory.
 **/
 @:notNull
-@:forward(getParentPath, concat, makeFilePath)
+@:forward(getParentPath, getName, concat, makeFilePath)
 abstract DirectoryRef(DirectoryPath) {
 	/**
 		Callback function for `DirectoryRef.from(path: DirectoryPath)`.

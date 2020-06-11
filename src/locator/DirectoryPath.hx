@@ -60,6 +60,13 @@ abstract DirectoryPath(PathString) to String {
 		return newPath;
 	}
 
+	@:access(locator.DirectoryPath)
+	public inline function getName(): String {
+		final length = this.length;
+		final newStartPos = this.getLastIndexOf(this.getMode().delimiter, length - 2).int() + 1;
+		return if (newStartPos == 0) this else this.substring(newStartPos, length - 1);
+	}
+
 	/**
 		@return Path of the parent directory of `this`.
 		`Maybe.none()` if `this` path indicates the root directory.
