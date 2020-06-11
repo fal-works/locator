@@ -1,9 +1,7 @@
 package locator;
 
-import greeter.CommandLineInterface as Cli;
-import greeter.CommandLineInterfaceSet as CliSet;
-
-using StringTools;
+import greeter.Cli;
+import locator.implementation.PathStringModeInstances;
 
 /**
 	String that represents a path to any file or directory.
@@ -13,39 +11,15 @@ using StringTools;
 @:forward
 abstract PathString(String) to String {
 	/**
-		Current mode (either `Unix` or `Dos`) for interpreting an arbitrary string as a path.
+		Current mode (either Unix or DOS) for interpreting an arbitrary string as a path.
 
 		At default this is set according to the current system on which the program is running.
 
 		When interpreting a `String` value:
-		- If `Unix`: `/` is interpreted as delimiter and `\` is treated as just a character with no special meaning.
-		- If `Dos`: Both `/` and `\` are interpreted as delimiter and then unified to `\`.
+		- If `unix`: `/` is interpreted as delimiter and `\` is treated as just a character with no special meaning.
+		- If `dos`: Both `/` and `\` are interpreted as delimiter and then unified to `\`.
 	**/
-	public static var mode(default, set): PathStringMode = Cli.current.type;
-
-	/**
-		Path delimiter used for internal representation of `PathString`.
-		Automatically set according to `mode`.
-	**/
-	static var delimiter: String = switch mode {
-			case Unix: Char.slash;
-			case Dos: Char.backslash;
-		};
-
-	/**
-		Character code of `delimiter`.
-		Automatically set according to `mode`.
-	**/
-	static var delimiterCode: Int = switch mode {
-			case Unix: Char.slashCode;
-			case Dos: Char.backslashCode;
-		};
-
-	/**
-		The CLI that corresponts to the current `mode`.
-		Automatically set according to `mode`.
-	**/
-	static var cli: Cli = Cli.current;
+	public static var mode: PathStringMode = PathStringModeInstances.get(Cli.current.type);
 
 	/**
 		Converts `s` to `PathString`.
@@ -56,32 +30,15 @@ abstract PathString(String) to String {
 		var hasLastDelimiter = lastCharCode == Char.slashCode; // First check slash here
 		var absolutePath = FileSystem.absolutePath(s); // This may drop the trailing delimiter
 
-		if (mode == Dos) {
+		if (mode.cliType == Dos) {
 			hasLastDelimiter = hasLastDelimiter || lastCharCode == Char.backslashCode;
 			absolutePath = formatAbsoluteDos(absolutePath);
 		}
 
 		if (hasLastDelimiter && !stringEndsWithDelimiter(absolutePath))
-			absolutePath += delimiter;
+			absolutePath += mode.delimiter;
 
 		return new PathString(absolutePath);
-	}
-
-	/**
-		Sets `PathString.mode` and other depending variables.
-	**/
-	static inline function set_mode(mode: PathStringMode): PathStringMode {
-		switch mode {
-			case Unix:
-				cli = CliSet.unix;
-				delimiter = Char.slash;
-				delimiterCode = "/".code;
-			case Dos:
-				cli = CliSet.dos;
-				delimiter = Char.backslash;
-				delimiterCode = "\\".code;
-		}
-		return PathString.mode = mode;
 	}
 
 	/**
@@ -97,7 +54,7 @@ abstract PathString(String) to String {
 		Converts `s` to `PathString`, assuming `s` is an absolute path.
 	**/
 	static inline function fromAbsolute(s: String): PathString {
-		if (mode == Dos) s = formatAbsoluteDos(s);
+		if (mode.cliType == Dos) s = formatAbsoluteDos(s);
 		return new PathString(s);
 	}
 
@@ -105,7 +62,7 @@ abstract PathString(String) to String {
 		@return `true` if `s` ends with a path delimiter.
 	**/
 	static extern inline function stringEndsWithDelimiter(s: String): Bool
-		return s.charCodeAt(s.length - 1) == delimiterCode;
+		return s.charCodeAt(s.length - 1) == mode.delimiterCode;
 
 	/**
 		@return `true` if `this` file or directory exists.
@@ -120,7 +77,7 @@ abstract PathString(String) to String {
 	public inline function getParentPath(): DirectoryPath {
 		return new DirectoryPath(this.substr(
 			0,
-			this.getLastIndexOf(delimiter).unwrap() + 1
+			this.getLastIndexOf(mode.delimiter).unwrap() + 1
 		));
 	}
 
@@ -129,7 +86,7 @@ abstract PathString(String) to String {
 		`Unix` if the first character is a slash, otherwise `Dos`.
 	**/
 	public inline function getMode(): PathStringMode
-		return if (this.charCodeAt(0) == Char.slashCode) Unix else Dos;
+		return if (this.charCodeAt(0) == Char.slashCode) PathStringMode.unix else PathStringMode.dos;
 
 	/**
 		Tells if `cli` matches the mode in which `this` was created.
@@ -137,7 +94,7 @@ abstract PathString(String) to String {
 		If `false` returned, `this` path cannot be used in `cli` even if the path is quoted with `this.quoteForCli()`.
 	**/
 	public inline function isAvailableInCli(cli: Cli): Bool
-		return getMode() == cli.type;
+		return getMode().cliType == cli.type;
 
 	/**
 		Returns a `String` that can be used as a single command line argument
@@ -149,7 +106,7 @@ abstract PathString(String) to String {
 	public inline function quoteForCli(?targetCli: Cli): String {
 		if (targetCli != null && !isAvailableInCli(targetCli))
 			throw 'Path ${this} cannot be used in ${targetCli.name}';
-		return getMode().getCli().quoteArgument(this);
+		return getMode().cli.quoteArgument(this);
 	}
 
 	/**
@@ -169,14 +126,14 @@ abstract PathString(String) to String {
 		Otherwise a new `PathString` with trailing delimiter appended.
 	**/
 	extern inline function addTrailingDelimiter(): PathString {
-		return if (endsWithDelimiter()) this else new PathString(this + PathString.delimiter);
+		return if (endsWithDelimiter()) this else new PathString(this + mode.delimiter);
 	}
 
 	/**
 		@return Sub-string after the last occurrence of `delimiter`.
 	**/
 	extern inline function sliceAfterLastDelimiter(): String
-		return this.substr(this.getLastIndexOf(delimiter).int() + 1);
+		return this.substr(this.getLastIndexOf(mode.delimiter).int() + 1);
 
 	/**
 		For internal use.
