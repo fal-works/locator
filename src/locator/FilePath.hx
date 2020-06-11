@@ -4,7 +4,7 @@ package locator;
 	Normalized absolute file path based on `String`.
 	The actual file does not have to exist.
 **/
-@:notNull @:forward
+@:notNull @:forward(exists, getMode, isAvailableInCli, quoteForCli, toPathObject, getParentPath)
 abstract FilePath(PathString) to PathString {
 	/**
 		Callback function for `FilePath.from()`.
@@ -21,7 +21,6 @@ abstract FilePath(PathString) to PathString {
 		Throws error if `pathString` ends with any file path delimiter.
 		@param pathString Either absolute or relative from the current working directory.
 	**/
-	@:access(locator.PathString)
 	@:from public static extern inline function from(pathString: PathString) {
 		#if !locator_validation_disable
 		if (pathString.endsWithDelimiter()) throw "Not a file path: " + pathString;
@@ -57,7 +56,6 @@ abstract FilePath(PathString) to PathString {
 	/**
 		@return The file name without directory.
 	**/
-	@:access(locator.PathString)
 	public extern inline function getName(): String
 		return this.sliceAfterLastDelimiter();
 

@@ -4,7 +4,7 @@ package locator;
 	Normalized absolute directory path based on `PathString`.
 	The actual directory does not have to exist.
 **/
-@:notNull @:forward
+@:notNull @:forward(exists, getMode, isAvailableInCli, quoteForCli, toPathObject, getParentPath)
 abstract DirectoryPath(PathString) to PathString {
 	/**
 		Callback function for `DirectoryPath.from()`.
@@ -20,7 +20,6 @@ abstract DirectoryPath(PathString) to PathString {
 		Creates a new `DirectoryPath` value.
 		@param pathString If not provided, returns the current working directory.
 	**/
-	@:access(locator.PathString)
 	@:from public static extern inline function from(pathString: PathString) {
 		return new DirectoryPath(pathString.addTrailingDelimiter());
 	}
@@ -28,7 +27,6 @@ abstract DirectoryPath(PathString) to PathString {
 	/**
 		@return New `DirectoryPath` value from the current working directory.
 	**/
-	@:access(locator.PathString)
 	public static extern inline function current() {
 		return new DirectoryPath(PathString.fromAbsolute(Sys.getCwd()));
 	}

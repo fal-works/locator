@@ -42,20 +42,20 @@ abstract PathString(String) to String {
 	}
 
 	/**
+		Converts `s` to `PathString`, assuming `s` is an absolute path.
+	**/
+	public static inline function fromAbsolute(s: String): PathString {
+		if (mode.cliType == Dos) s = formatAbsoluteDos(s);
+		return new PathString(s);
+	}
+
+	/**
 		Formats `s` assuming that it is an absolute path on DOS.
 		@return `s` with delimiters unified to backslash and first character changed to upper case.
 	**/
 	static inline function formatAbsoluteDos(s: String): String {
 		s = s.replace(Char.slash, Char.backslash);
 		return s.charAt(0).toUpperCase() + s.substr(1);
-	}
-
-	/**
-		Converts `s` to `PathString`, assuming `s` is an absolute path.
-	**/
-	static inline function fromAbsolute(s: String): PathString {
-		if (mode.cliType == Dos) s = formatAbsoluteDos(s);
-		return new PathString(s);
 	}
 
 	/**
@@ -80,7 +80,8 @@ abstract PathString(String) to String {
 		`Unix` if the first character is a slash, otherwise `Dos`.
 	**/
 	public inline function getMode(): PathStringMode
-		return if (this.charCodeAt(0) == Char.slashCode) PathStringMode.unix else PathStringMode.dos;
+		return if (this.charCodeAt(0) == Char.slashCode) PathStringMode.unix else
+			PathStringMode.dos;
 
 	/**
 		Tells if `cli` matches the mode in which `this` was created.
@@ -112,21 +113,21 @@ abstract PathString(String) to String {
 	/**
 		@return `true` if `this` ends with a path delimiter.
 	**/
-	extern inline function endsWithDelimiter(): Bool
+	public extern inline function endsWithDelimiter(): Bool
 		return this.lastCharCode() == getMode().delimiterCode;
 
 	/**
 		@return `this` if it has already a trailing delimiter.
 		Otherwise a new `PathString` with trailing delimiter appended.
 	**/
-	extern inline function addTrailingDelimiter(): PathString {
+	public extern inline function addTrailingDelimiter(): PathString {
 		return if (endsWithDelimiter()) this else new PathString(this + getMode().delimiter);
 	}
 
 	/**
 		@return Sub-string after the last occurrence of `delimiter`.
 	**/
-	extern inline function sliceAfterLastDelimiter(): String
+	public extern inline function sliceAfterLastDelimiter(): String
 		return this.substr(this.getLastIndexOf(getMode().delimiter).int() + 1);
 
 	/**
