@@ -1,6 +1,5 @@
 package locator;
 
-import haxe.SysTools;
 import greeter.CommandLineInterface as Cli;
 import greeter.CommandLineInterfaceSet as CliSet;
 
@@ -133,20 +132,21 @@ abstract PathString(String) to String {
 		return if (this.charCodeAt(0) == Char.slashCode) Unix else Dos;
 
 	/**
-		@param cli The CLI on which the result string is to be used.
-		If not provided, determined according to the current `PathString.mode`.
-		@return String that can be used as a single command line argument on `cli`.
+		Tells if `cli` matches the mode in which `this` was created.
+
+		If `false` returned, `this` path cannot be used in `cli` even if the path is quoted with `this.quoteForCli()`.
 	**/
-	public inline function quoteForCli(?cli: Cli): String {
-		return switch (if (cli != null) cli.type else mode) {
-			case Unix:
-				if (getMode() == Dos) throw 'Cannot use path ${this} for Unix CLI.';
-				SysTools.quoteUnixArg(this);
-			case Dos:
-				if (getMode() == Unix) throw 'Cannot use path ${this} for Unix CLI.';
-				SysTools.quoteWinArg(this, true);
-		}
-	}
+	public inline function isAvailableInCli(cli: Cli): Bool
+		return getMode() == cli.type;
+
+	/**
+		Returns a `String` that can be used as a single command line argument
+		on the CLI that corresponds to the `PathStringMode` in which `this` was created.
+
+		Check with `isAvailableInCli()` before caling this, if needed.
+	**/
+	public inline function quoteForCli(): String
+		return getMode().getCli().quoteArgument(this);
 
 	/**
 		Creates a new `haxe.io.Path` instance.
