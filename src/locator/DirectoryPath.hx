@@ -4,7 +4,8 @@ package locator;
 	Normalized absolute directory path based on `PathString`.
 	The actual directory does not have to exist.
 **/
-@:notNull @:forward(exists, getMode, isAvailableInCli, quoteForCli, toPathObject, toString, getParentPath)
+@:notNull
+@:forward(exists, getMode, isAvailableInCli, quoteForCli, toPathObject, toString)
 abstract DirectoryPath(PathString) to String {
 	/**
 		Callback function for `DirectoryPath.from()`.
@@ -57,6 +58,16 @@ abstract DirectoryPath(PathString) to String {
 		final newPath = DirectoryPath.from(relPathString);
 		Sys.setCwd(cwd);
 		return newPath;
+	}
+
+	/**
+		@return Path of the parent directory of `this`.
+		`Maybe.none()` if `this` path indicates the root directory.
+	**/
+	@:access(locator.DirectoryPath)
+	public inline function getParentPath(): Maybe<DirectoryPath> {
+		final newLength = this.getLastIndexOf(this.getMode().delimiter, this.length - 2).int() + 1;
+		return if (newLength == 0) Maybe.none() else Maybe.from(new DirectoryPath(this.substr(0, newLength)));
 	}
 
 	/**

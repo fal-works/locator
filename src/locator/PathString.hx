@@ -65,17 +65,6 @@ abstract PathString(String) to String {
 		return FileSystem.exists(this);
 
 	/**
-		@return Path of the parent directory of `this`.
-	**/
-	@:access(locator.DirectoryPath)
-	public inline function getParentPath(): DirectoryPath {
-		return new DirectoryPath(this.substr(
-			0,
-			this.getLastIndexOf(getMode().delimiter).unwrap() + 1
-		));
-	}
-
-	/**
 		Tells in which mode `this` path was created.
 		`Unix` if the first character is a slash, otherwise `Dos`.
 	**/

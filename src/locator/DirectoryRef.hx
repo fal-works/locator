@@ -50,11 +50,14 @@ abstract DirectoryRef(DirectoryPath) {
 	public var path(get, never): DirectoryPath;
 
 	/**
-		@return The parent directory of `this`.
+		@return The parent directory of `this`. `Maybe.none()` if `this` is the root directory.
 	**/
 	@:access(locator.DirectoryRef)
-	public extern inline function getParent(): DirectoryRef {
-		return new DirectoryRef(this.getParentPath());
+	public extern inline function getParent(): Maybe<DirectoryRef> {
+		final path = this.getParentPath();
+		return if (path.isSome()) {
+			Maybe.from(new DirectoryRef(path.unwrap()));
+		} else Maybe.none();
 	}
 
 	/**

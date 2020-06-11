@@ -4,7 +4,8 @@ package locator;
 	Normalized absolute file path based on `String`.
 	The actual file does not have to exist.
 **/
-@:notNull @:forward(exists, getMode, isAvailableInCli, quoteForCli, toPathObject, toString, getParentPath)
+@:notNull
+@:forward(exists, getMode, isAvailableInCli, quoteForCli, toPathObject, toString)
 abstract FilePath(PathString) to String {
 	/**
 		Callback function for `FilePath.from()`.
@@ -52,6 +53,17 @@ abstract FilePath(PathString) to String {
 	**/
 	public extern inline function or(defaultPath: FilePath): FilePath
 		return coalesce(new FilePath(this), defaultPath);
+
+	/**
+		@return Path of the parent directory of `this`.
+	**/
+	@:access(locator.DirectoryPath)
+	public inline function getParentPath(): DirectoryPath {
+		return new DirectoryPath(this.substr(
+			0,
+			this.getLastIndexOf(this.getMode().delimiter).unwrap() + 1
+		));
+	}
 
 	/**
 		@return The file name without directory.

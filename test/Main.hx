@@ -20,6 +20,13 @@ class Main {
 		final file = filePath.find();
 		Sys.println('\n------------------------\n${file.getContent()}\n------------------------');
 
-		Sys.println(filePath.getParentPath().getParentPath());
+		Sys.println("\nGet parent recursively:");
+		var path = filePath.getParentPath().getParentPath();
+		var safetyCount = 0;
+		while (path.isSome()) {
+			Sys.println(path.unwrap());
+			path = path.unwrap().getParentPath();
+			if (100 < ++safetyCount) throw "Something is wrong.";
+		}
 	}
 }
