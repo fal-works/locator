@@ -16,7 +16,7 @@ class Main {
 		Sys.println('  dir: ${filePath.getParentPath()}');
 		Sys.println('  name: ${filePath.getName()}');
 		Sys.println('  ext: ${filePath.getExtension()}');
-		Sys.println('  quoted: ${filePath.quote()}');
+		Sys.println('  quoted: ${filePath.quoteForCli()}');
 		final file = filePath.find();
 		Sys.println('\n------------------------\n${file.getContent()}\n------------------------');
 	}
