@@ -82,9 +82,10 @@ abstract PathString(String) to String {
 
 	/**
 		Checks if `cli` matches the mode in which `this` was created. If not, throws an error.
+		This does not check if an actual file/directory exists or if the path is accessible.
 		@return `this`
 	**/
-	public inline function validateForCli(cli: Cli): PathString {
+	public inline function validate(cli: Cli): PathString {
 		if (!isAvailableInCli(cli)) throw 'Path ${this} cannot be used in ${cli.name}';
 		return this;
 	}

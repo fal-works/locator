@@ -130,8 +130,8 @@ abstract DirectoryPath(PathString) to String {
 		Checks if `cli` matches the mode in which `this` was created. If not, throws an error.
 		@return `this`
 	**/
-	public inline function validateForCli(cli: Cli): DirectoryPath {
-		return new DirectoryPath(this.validateForCli(cli));
+	public inline function validate(cli: Cli): DirectoryPath {
+		return new DirectoryPath(this.validate(cli));
 	}
 
 	/**

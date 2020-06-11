@@ -109,8 +109,8 @@ abstract FilePath(PathString) to String {
 		Checks if `cli` matches the mode in which `this` was created. If not, throws an error.
 		@return `this`
 	**/
-	public inline function validateForCli(cli: Cli): FilePath {
-		return new FilePath(this.validateForCli(cli));
+	public inline function validate(cli: Cli): FilePath {
+		return new FilePath(this.validate(cli));
 	}
 
 	/**
