@@ -9,7 +9,12 @@ abstract DirectoryPath(PathString) to PathString {
 	/**
 		Callback function for `DirectoryPath.from()`.
 	**/
-	public static final createCallback = (s: String) -> DirectoryPath.from(s);
+	public static final createCallback = (s: PathString) -> DirectoryPath.from(s);
+
+	/**
+		Callback function for `FilePath.from(s: String)`.
+	**/
+	public static final fromStringCallback = (s: String) -> FilePath.from(s);
 
 	/**
 		Creates a new `DirectoryPath` value.

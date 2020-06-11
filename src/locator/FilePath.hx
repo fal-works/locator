@@ -12,6 +12,11 @@ abstract FilePath(PathString) to PathString {
 	public static final createCallback = (s: PathString) -> FilePath.from(s);
 
 	/**
+		Callback function for `FilePath.from(s: String)`.
+	**/
+	public static final fromStringCallback = (s: String) -> FilePath.from(s);
+
+	/**
 		Creates a new `FilePath` value.
 		Throws error if `pathString` ends with any file path delimiter.
 		@param pathString Either absolute or relative from the current working directory.
