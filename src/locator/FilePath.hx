@@ -5,7 +5,7 @@ package locator;
 	The actual file does not have to exist.
 **/
 @:notNull
-@:forward(exists, getMode, isAvailableInCli, quoteForCli, toPathObject, toString)
+@:forward(length, exists, getMode, toRelative, isAvailableInCli, quoteForCli, toPathObject, toString)
 abstract FilePath(PathString) to String {
 	/**
 		Callback function for `FilePath.from()`.

@@ -95,6 +95,49 @@ abstract PathString(String) to String {
 	}
 
 	/**
+		Creates a relative path string of `this` from `reference`.
+
+		If `this` is not a descendant of the `reference` directory,
+		this method recursively looks for a common ancestor
+		(not very efficient because it repeats string operation in the recursion loop).
+		The result remains absolute if the recursion reaches the root directory or exceeds `maxDepth`.
+
+		@param reference The reference directory path.
+		If not provided, the current working directory is used.
+		@param maxDepth The max recursion depth. Defaults to `2`,
+		which allows `../../myDir` while it does not allow `../../../myDir`.
+	**/
+	public function toRelative(?reference: DirectoryPath, maxDepth: Int = 2) {
+		var maybeRef = Maybe.from(reference);
+		var ref = if (maybeRef.isSome()) maybeRef.unwrap() else DirectoryPath.current();
+
+		final delimiter = getMode().delimiter;
+		var prefix = "." + delimiter;
+		if (this.startsWith(ref)) return prefix + this.substr(ref.length);
+
+		var depth = 1;
+		if (maxDepth < depth) return this;
+		maybeRef = ref.getParentPath();
+		if (maybeRef.isNone()) return this;
+		ref = maybeRef.unwrap();
+		prefix = "." + prefix;
+		if (this.startsWith(ref)) return prefix + this.substr(ref.length);
+		if (maxDepth < ++depth) return this;
+		maybeRef = ref.getParentPath();
+
+		final parentGetter = ".." + delimiter;
+		while (maybeRef.isSome()) {
+			ref = maybeRef.unwrap();
+			prefix = parentGetter + prefix;
+			if (this.startsWith(ref)) return prefix + this.substr(ref.length);
+			if (maxDepth < ++depth) return this;
+			maybeRef = ref.getParentPath();
+		}
+
+		return this;
+	}
+
+	/**
 		Creates a new `haxe.io.Path` instance.
 	**/
 	@:to public extern inline function toPathObject(): Path

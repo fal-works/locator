@@ -32,5 +32,12 @@ class Main {
 			path = curPath.getParentPath();
 			if (100 < ++safetyCount) throw "Something is wrong.";
 		}
+
+		Sys.println("\nGet relative path:");
+		final absPath = FilePath.from("C:/aaa/bbb/ccc/ddd/e.hx");
+		final refPath = DirectoryPath.from("C:/aaa/bbb/xxx/zzz/");
+		Sys.println("abs: " + absPath);
+		Sys.println("ref: " + refPath);
+		Sys.println("rel: " + absPath.toRelative(refPath));
 	}
 }
