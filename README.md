@@ -8,17 +8,21 @@ Requires **Haxe 4**. Only for `sys` targets.
 
 ## Types
 
+### Types based on `String`
+
 - `PathString`: Path of file/directory. Underlying type of `FilePath` and `DirectoryPath`.
 - `FilePath`: File path. The actual file does not necessarily have to exist.
 - `FileRef`: Represents a file that actually exists.
-- `FileList`: Array of `FileRef`s.
 - `DirectoryPath`: Directory path. The actual directory does not necessarily have to exist.
 - `DirectoryRef`: Represents a directory that actually exists.
 
-Internally:
+The path is automatically converted to absolute when creating any value of the types above.
 
-- All of these (except `FileList`) are just abstract based on `String`.
-- The path is automatically converted to absolute when creating any value of the types above.
+### Other types
+
+- `FileList`: Array of `FileRef`s.
+- `FileOrDirectoryPath`: Enum, either `FilePath` or `DirectoryPath`.
+- `FileOrDirectoryRef`: Enum, either `FileRef` or `DirectoryRef`.
 
 
 ## Compilation flags
