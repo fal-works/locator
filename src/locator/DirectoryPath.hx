@@ -53,36 +53,30 @@ abstract DirectoryPath(PathString) to String {
 		return if (a.exists()) a else b;
 
 	/**
-		Concats `this` and `relPathString`, and creates a new `DirectoryPath` value.
-		Throws error if an absolute path is passed.
-
-		(java) Not available on Java.
-		@param relPathString Relative path of a directory from `this` directory path.
+		Tries to remove the leading `./` (if DOS `.\` as well).
 	**/
-	public extern inline function concat(relPathString: String): DirectoryPath {
-		#if !locator_validation_disable
-		if (Path.isAbsolute(relPathString))
-			throw "Cannot concat absolute path: " + relPathString;
-		#end
-		final cwd = Sys.getCwd();
-		Sys.setCwd(this);
-		final newPath = DirectoryPath.from(relPathString);
-		Sys.setCwd(cwd);
-		return newPath;
+	static inline function relativeCurrent(s: String, dos: Bool): Maybe<String> {
+		return if (s.startsWith("./") || (dos && s.startsWith(".\\")))
+			Maybe.from(s.substr(2)) else Maybe.none();
 	}
 
+	/**
+		Tries to remove the leading `../` (if DOS `..\` as well).
+	**/
+	static inline function relativeParent(s: String, dos: Bool): Maybe<String> {
+		return if (s.startsWith("../") || (dos && s.startsWith("..\\")))
+			Maybe.from(s.substr(3)) else Maybe.none();
+	}
+
+	/**
+		@return The name of the directory specified by `this` path.
+	**/
 	@:access(locator.DirectoryPath)
 	public inline function getName(): String {
 		final length = this.length;
-		final newStartPos = this.getLastIndexOf(
-			this.getMode().delimiter,
-			length - 2
-		).int()
-			+ 1;
-		return if (newStartPos == 0) this else this.substring(
-			newStartPos,
-			length - 1
-		);
+		final delimiter = this.getMode().delimiter;
+		final pos = this.lastIndexOf(delimiter, length - 2) + 1;
+		return if (pos == 0) this else this.substring(pos, length - 1);
 	}
 
 	/**
@@ -103,23 +97,18 @@ abstract DirectoryPath(PathString) to String {
 	}
 
 	/**
-		Concats `this` and `relPathString`, and creates a new `FilePath` value.
-		Throws error if an absolute path is passed.
-
-		(java) Not available on Java.
-		@param relPathString Relative path of a file from `this` directory path.
+		Concats `this` and `relPath`, and creates a new `DirectoryPath` value.
+		@param relPath Relative path of a directory from `this` directory path.
 	**/
-	public extern inline function makeFilePath(relPathString: String): FilePath {
-		#if !locator_validation_disable
-		if (Path.isAbsolute(relPathString))
-			throw "Cannot concat absolute path: " + relPathString;
-		#end
-		final cwd = Sys.getCwd();
-		Sys.setCwd(this);
-		final newPath = FilePath.from(relPathString);
-		Sys.setCwd(cwd);
-		return newPath;
-	}
+	public extern inline function concat(relPath: String): DirectoryPath
+		return DirectoryPath.from(concatPath(relPath));
+
+	/**
+		Concats `this` and `relPath`, and creates a new `FilePath` value.
+		@param relPath Relative path of a file from `this` directory path.
+	**/
+	public extern inline function makeFilePath(relPath: String): FilePath
+		return FilePath.from(concatPath(relPath));
 
 	/**
 		Finds the actual directory.
@@ -163,6 +152,40 @@ abstract DirectoryPath(PathString) to String {
 	**/
 	public inline function validate(cli: Cli): DirectoryPath {
 		return new DirectoryPath(this.validate(cli));
+	}
+
+	/**
+		Creates a new `PathString` by concatenating `this` and `relPathStr`.
+		@param relPathStr Relative path of a file/directory from `this` directory path.
+	**/
+	function concatPath(relPathStr: String): PathString {
+		final mode = this.getMode();
+		#if !locator_validation_disable
+		if (Path.isAbsolute(relPathStr))
+			throw "Cannot concat absolute path: " + relPathStr;
+		if (mode != PathString.mode)
+			throw 'Cannot concat ${mode.cli.name} path and ${PathString.mode.cli.name} path.';
+		#end
+
+		final dos = mode.cliType == Dos;
+		var relPath = relPathStr;
+		var refDirPath = new DirectoryPath(this);
+		var nextRelPath = relativeCurrent(relPath, dos);
+
+		if (nextRelPath.isSome())
+			return DirectoryPath.from(refDirPath + nextRelPath.unwrap());
+
+		nextRelPath = relativeParent(relPath, dos);
+		while (nextRelPath.isSome()) {
+			relPath = nextRelPath.unwrap();
+			final nextRef = refDirPath.getParentPath();
+			if (nextRef.isNone())
+				throw 'Cannot concatenate:\n  Reference dir: $this\n  Relative path: $relPathStr';
+			refDirPath = nextRef.unwrap();
+			nextRelPath = relativeParent(relPath, dos);
+		}
+
+		return PathString.from(refDirPath + relPath);
 	}
 
 	/**
