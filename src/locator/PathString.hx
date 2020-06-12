@@ -22,6 +22,11 @@ abstract PathString(String) to String {
 	public static var mode: PathStringMode = PathStringModeInstances.get(Cli.current.type);
 
 	/**
+		Callback function for `PathString.from()`.
+	**/
+	public static final fromStringCallback = (s: String) -> PathString.from(s);
+
+	/**
 		Converts `s` to `PathString`.
 	**/
 	@:from public static inline function from(s: String): PathString {
