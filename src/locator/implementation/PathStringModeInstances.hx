@@ -7,6 +7,7 @@ import greeter.CliType;
 	Set of `PathString` instances.
 **/
 @:structInit
+@:access(locator.PathStringMode)
 class PathStringModeInstances {
 	public static final unix: PathStringMode = {
 		cli: Cli.unix,

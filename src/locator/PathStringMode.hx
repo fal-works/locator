@@ -47,7 +47,7 @@ class PathStringMode {
 	**/
 	public final delimiterCode: Int;
 
-	public function new(
+	function new(
 		cli: Cli,
 		cliType: CliType,
 		delimiter: String,
