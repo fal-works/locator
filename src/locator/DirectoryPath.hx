@@ -128,7 +128,7 @@ abstract DirectoryPath(PathString) to String {
 		return DirectoryRef.from(this);
 
 	/**
-		Tries to find the actual file.
+		Tries to find the actual directory.
 	**/
 	@:access(locator.DirectoryRef)
 	public extern inline function tryFind(): Maybe<DirectoryRef>
@@ -141,6 +141,14 @@ abstract DirectoryPath(PathString) to String {
 	public extern inline function createDirectory(): DirectoryRef {
 		FileSystem.createDirectory(this);
 		return new DirectoryRef(this);
+	}
+
+	/**
+		Finds the actual directory. Creates it if not found.
+	**/
+	public extern inline function findOrCreate(): DirectoryRef {
+		final dir = tryFind();
+		return if (dir.isSome()) dir.unwrap() else createDirectory();
 	}
 
 	/**
