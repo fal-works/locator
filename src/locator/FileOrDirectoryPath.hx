@@ -3,7 +3,7 @@ package locator;
 /**
 	A path that specifies either a file or a directory.
 **/
-abstract FileOrDirectoryPath(Data) from Data {
+abstract FileOrDirectoryPath(Data) from Data to Data {
 	/**
 		Callback function for `FileOrDirectoryPath.fromFilePath()`.
 	**/
@@ -60,6 +60,12 @@ abstract FileOrDirectoryPath(Data) from Data {
 			case Directory(path): path;
 		}
 	}
+
+	/**
+		@return Enum representation of `this`.
+	**/
+	public extern inline function toEnum(): Data
+		return this;
 }
 
 private enum Data {
