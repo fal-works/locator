@@ -1,5 +1,7 @@
 package locator;
 
+import greeter.Cli;
+
 /**
 	A path that specifies either a file or a directory.
 **/
@@ -87,6 +89,18 @@ abstract FileOrDirectoryPath(Data) from Data to Data {
 	**/
 	public extern inline function toEnum(): Data
 		return this;
+
+	/**
+		Returns a `String` that can be used as a single command line argument.
+
+		@param targetCli If provided, checks if `this` matches the target CLI and throws error if not.
+	**/
+	public inline function quote(?targetCli: Cli): String {
+		return switch this {
+			case File(path): path.quote(targetCli);
+			case Directory(path): path.quote(targetCli);
+		}
+	}
 }
 
 private enum Data {
