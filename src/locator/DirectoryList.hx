@@ -20,6 +20,12 @@ abstract DirectoryList(Data) from Data to Data {
 		return this;
 
 	/**
+		@return New list of directory names.
+	**/
+	public inline function names(): Array<String>
+		return this.map(directory -> directory.getName());
+
+	/**
 		Tries to find a file specified by `relativePath`.
 		@param relativePath Typically just a file name.
 	**/
