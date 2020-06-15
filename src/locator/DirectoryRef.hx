@@ -116,7 +116,7 @@ abstract DirectoryRef(DirectoryPath) {
 		Copies `this` directory to `destinationPath` with all of its contents (recursively).
 		Overwrites the destination files if it already exist.
 		@param destinationPath The destination path.
-		Note that this is NOT the directory which should contain the copied directory,
+		Note that this is NOT the directory which should contain the copied directory (unlike `copyTo()`),
 		but the directory itself after copied.
 		@return New `DirectoryRef` value for the destination directory.
 	**/
@@ -130,6 +130,19 @@ abstract DirectoryRef(DirectoryPath) {
 			case Directory(ref): ref.copy(destinationPath.concat(ref.getName()));
 		}
 		return new DirectoryRef(destinationPath);
+	}
+	/**
+		Copies `this` directory to `destinationPath` with the same directory name and
+		with all of its contents (recursively).
+		Overwrites the destination files if it already exist.
+		@param destinationPath The destination path.
+		Unlike `copy()`, this is the directory which should contain the copied directory.
+		@return New `DirectoryRef` value for the destination directory.
+	**/
+	public inline function copyTo(
+		destinationPath: DirectoryPath
+	): DirectoryRef {
+		return copy(destinationPath.concat(this.getName()));
 	}
 
 	/**
