@@ -105,6 +105,14 @@ abstract DirectoryRef(DirectoryPath) {
 		Sys.setCwd(this);
 
 	/**
+		@return All files and directories in `this`.
+	**/
+	public inline function getContents(): FileOrDirectoryList {
+		return FileSystem.readDirectory(this)
+			.map(name -> FileOrDirectoryRef.fromPath(this + name));
+	}
+
+	/**
 		@return The path of `this` directory as `String`.
 	**/
 	public extern inline function toString(): String

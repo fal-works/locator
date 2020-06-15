@@ -39,5 +39,15 @@ class Main {
 		Sys.println("abs: " + absPath);
 		Sys.println("ref: " + refPath);
 		Sys.println("rel: " + absPath.toRelative(refPath));
+
+		Sys.println("\nGet contents of cwd:");
+		for (element in cwdPath.find().getContents()) {
+			switch element.toEnum() {
+				case File(ref):
+					Sys.println('File: ${ref.getName()}');
+				case Directory(ref):
+					Sys.println('Dir: ${ref.getName()}');
+			}
+		}
 	}
 }
