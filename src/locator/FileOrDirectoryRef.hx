@@ -25,11 +25,11 @@ abstract FileOrDirectoryRef(Data) from Data {
 	public static final fromStringCallback = (s: String) -> fromPath(s);
 
 	/**
-		Callback function for `FileOrDirectoryRef.toDirectoryRef()`.
+		Callback function for `FileOrDirectoryRef.toDirectory()`.
 	**/
 	public static final toDirectoryCallback = (
 		ref: FileOrDirectoryRef
-	) -> ref.toDirectoryRef();
+	) -> ref.toDirectory();
 
 	/**
 		Converts `ref` to `FileOrDirectoryRef`.
@@ -73,7 +73,7 @@ abstract FileOrDirectoryRef(Data) from Data {
 		Unifies `this` to a directory.
 		If `this` is `File`, the parent directory is returned.
 	**/
-	@:to public extern inline function toDirectoryRef(): DirectoryRef {
+	@:to public extern inline function toDirectory(): DirectoryRef {
 		return switch this {
 			case File(ref): ref.getParent();
 			case Directory(ref): ref;
