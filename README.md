@@ -24,7 +24,7 @@ The path is automatically converted to absolute when creating any value of the t
 - `DirectoryList`: Array of `DirectoryRef`s.
 - `FileOrDirectoryPath`: Enum, either `FilePath` or `DirectoryPath`.
 - `FileOrDirectoryRef`: Enum, either `FileRef` or `DirectoryRef`.
-
+- `FileOrDirectoryList`: Array of `FileOrDirectoryRef`.
 
 ## Compilation flags
 
