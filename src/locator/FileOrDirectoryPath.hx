@@ -5,6 +5,25 @@ package locator;
 **/
 abstract FileOrDirectoryPath(Data) from Data {
 	/**
+		Callback function for `FileOrDirectoryPath.fromFilePath()`.
+	**/
+	public static final fromFilePathCallback = (path: FilePath) -> fromFilePath(path);
+
+	/**
+		Callback function for `FileOrDirectoryPath.fromDirectoryPath()`.
+	**/
+	public static final fromDirectoryPathCallback = (
+		path: DirectoryPath
+	) -> fromDirectoryPath(path);
+
+	/**
+		Callback function for `FileOrDirectoryPath.toDirectoryPath()`.
+	**/
+	public static final toDirectoryPathCallback = (
+		path: FileOrDirectoryPath
+	) -> path.toDirectoryPath();
+
+	/**
 		Converts `path` to `FileOrDirectoryPath`.
 	**/
 	@:from public static extern inline function fromFilePath(

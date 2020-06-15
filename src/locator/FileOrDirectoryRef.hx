@@ -5,6 +5,33 @@ package locator;
 **/
 abstract FileOrDirectoryRef(Data) from Data {
 	/**
+		Callback function for `FileOrDirectoryRef.fromFile()`.
+	**/
+	public static final fromFileCallback = (ref: FileRef) -> fromFile(ref);
+
+	/**
+		Callback function for `FileOrDirectoryRef.fromDirectory()`.
+	**/
+	public static final fromDirectoryCallback = (ref: DirectoryRef) -> fromDirectory(ref);
+
+	/**
+		Callback function for `FileOrDirectoryRef.fromPath()`.
+	**/
+	public static final fromPathCallback = (path: PathString) -> fromPath(path);
+
+	/**
+		Callback function for `FileOrDirectoryRef.fromPath(s: String)`.
+	**/
+	public static final fromStringCallback = (s: String) -> fromPath(s);
+
+	/**
+		Callback function for `FileOrDirectoryRef.toDirectoryRef()`.
+	**/
+	public static final toDirectoryCallback = (
+		ref: FileOrDirectoryRef
+	) -> ref.toDirectoryRef();
+
+	/**
 		Converts `ref` to `FileOrDirectoryRef`.
 	**/
 	@:from public static extern inline function fromFile(ref: FileRef): FileOrDirectoryRef
@@ -22,10 +49,13 @@ abstract FileOrDirectoryRef(Data) from Data {
 		Converts `path` to `FileOrDirectoryRef`.
 		Throws error if neither a file nor a directory is found.
 	**/
-	@:from public static extern inline function fromPath(path: PathString): FileOrDirectoryRef {
-		return if (FilePath.from(path).exists()) FileRef.fromPath(path)
-		else if (DirectoryPath.from(path).exists()) DirectoryRef.fromPath(path)
-		else throw 'File or directory not found: $path';
+	@:from public static extern inline function fromPath(
+		path: PathString
+	): FileOrDirectoryRef {
+		return if (FilePath.from(path)
+			.exists()) FileRef.fromPath(path) else if (DirectoryPath.from(path)
+			.exists()) DirectoryRef.fromPath(path) else
+			throw 'File or directory not found: $path';
 	}
 
 	/**
