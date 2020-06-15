@@ -3,6 +3,7 @@ package locator;
 /**
 	Value that specifies either a file or a directory.
 **/
+@:notNull
 abstract FileOrDirectoryRef(Data) from Data to Data {
 	/**
 		Callback function for `FileOrDirectoryRef.fromFile()`.
