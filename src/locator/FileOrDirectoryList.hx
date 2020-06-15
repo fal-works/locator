@@ -20,6 +20,12 @@ abstract FileOrDirectoryList(Data) from Data to Data {
 		return this;
 
 	/**
+		@return New list of file/directory names.
+	**/
+	public inline function getNames(): Array<String>
+		return this.map(ref -> ref.getName());
+
+	/**
 		@return Files contained in `this` list.
 	**/
 	public inline function filerFiles(): FileList {
