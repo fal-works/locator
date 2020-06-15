@@ -107,6 +107,18 @@ abstract FileOrDirectoryRef(Data) from Data to Data {
 	**/
 	public extern inline function toEnum(): Data
 		return this;
+
+	/**
+		Copies `this` file/directory to `destinationPath` with the same file/directory name.
+		@param destinationPath The path of the directory which should contain the copied file/directory.
+		@return New `FileOrDirectoryRef` value for the destination file/directory.
+	**/
+	public inline function copyTo(destinationPath: DirectoryPath): FileOrDirectoryRef {
+		return switch this {
+			case File(ref): ref.copyTo(destinationPath);
+			case Directory(ref): ref.copyTo(destinationPath);
+		}
+	}
 }
 
 private enum Data {

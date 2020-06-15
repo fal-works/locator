@@ -70,6 +70,15 @@ abstract FileOrDirectoryList(Data) from Data to Data {
 			directories: directories
 		};
 	}
+
+	/**
+		Copies all contents in `this` list to `destination` with the same names (recursively).
+		Overwrites destination files if they already exist.
+	**/
+	public inline function copyTo(destinationPath: DirectoryPath): Void {
+		for (i in 0...this.length)
+			this[i].copyTo(destinationPath);
+	}
 }
 
 #if eval

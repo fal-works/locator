@@ -26,6 +26,16 @@ abstract DirectoryList(Data) from Data to Data {
 		return this.map(directory -> directory.getName());
 
 	/**
+		Copies all directories in `this` list to `destination` with the same directory names,
+		with all of their contents (recursively).
+		Overwrites destination files if they already exist.
+	**/
+	public inline function copyTo(destinationPath: DirectoryPath): Void {
+		for (i in 0...this.length)
+			this[i].copyTo(destinationPath);
+	}
+
+	/**
 		Tries to find a file specified by `relativePath`.
 		@param relativePath Typically just a file name.
 	**/
