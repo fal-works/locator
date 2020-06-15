@@ -47,6 +47,16 @@ abstract FileOrDirectoryRef(Data) from Data to Data {
 		return Directory(ref);
 
 	/**
+		Converts `this` to `FileOrDirectoryPath`.
+	**/
+	@:to public inline function toPath(): FileOrDirectoryPath {
+		return switch this {
+			case File(ref): ref.path;
+			case Directory(ref): ref.path;
+		}
+	}
+
+	/**
 		@return `String` representation of `this`.
 	**/
 	@:to public inline function toString(): String {
