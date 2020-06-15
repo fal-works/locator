@@ -49,12 +49,12 @@ abstract FileOrDirectoryRef(Data) from Data to Data {
 		Converts `path` to `FileOrDirectoryRef`.
 		Throws error if neither a file nor a directory is found.
 	**/
-	@:from public static extern inline function fromPath(
-		path: PathString
-	): FileOrDirectoryRef {
-		return if (DirectoryPath.from(path).exists()) {
-			DirectoryRef.fromPath(path);
-		} else if (FilePath.from(path).exists()) {
+	@:from public static function fromPath(path: PathString): FileOrDirectoryRef {
+		try {
+			if (FileSystem.isDirectory(path))
+				return DirectoryRef.fromPath(path);
+		} catch (e:Dynamic) {}
+		return if (FilePath.from(path).exists()) {
 			FileRef.fromPath(path);
 		} else throw 'File or directory not found: $path';
 	}
