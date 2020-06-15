@@ -4,7 +4,7 @@ package locator;
 	Value referring to an existing file.
 **/
 @:notNull
-@:forward(getParentPath, getName, getExtension, getNameWithoutExtension)
+@:forward(toString, getParentPath, getName, getExtension, getNameWithoutExtension)
 abstract FileRef(FilePath) {
 	/**
 		Callback function for `FileRef.from()`.
@@ -91,12 +91,6 @@ abstract FileRef(FilePath) {
 	public extern inline function getParent(): DirectoryRef {
 		return new DirectoryRef(this.getParentPath());
 	}
-
-	/**
-		@return The path of `this` file as `String`.
-	**/
-	public extern inline function toString(): String
-		return this;
 
 	/**
 		For internal use.
