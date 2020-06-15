@@ -52,10 +52,11 @@ abstract FileOrDirectoryRef(Data) from Data to Data {
 	@:from public static extern inline function fromPath(
 		path: PathString
 	): FileOrDirectoryRef {
-		return if (FilePath.from(path)
-			.exists()) FileRef.fromPath(path) else if (DirectoryPath.from(path)
-			.exists()) DirectoryRef.fromPath(path) else
-			throw 'File or directory not found: $path';
+		return if (DirectoryPath.from(path).exists()) {
+			DirectoryRef.fromPath(path);
+		} else if (FilePath.from(path).exists()) {
+			FileRef.fromPath(path);
+		} else throw 'File or directory not found: $path';
 	}
 
 	/**
@@ -88,6 +89,6 @@ abstract FileOrDirectoryRef(Data) from Data to Data {
 }
 
 private enum Data {
-	File(path: FileRef);
-	Directory(path: DirectoryRef);
+	File(ref: FileRef);
+	Directory(ref: DirectoryRef);
 }
