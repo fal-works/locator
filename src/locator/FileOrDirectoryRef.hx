@@ -19,6 +19,16 @@ abstract FileOrDirectoryRef(Data) from Data {
 		return Directory(ref);
 
 	/**
+		Converts `path` to `FileOrDirectoryRef`.
+		Throws error if neither a file nor a directory is found.
+	**/
+	@:from public static extern inline function fromPath(path: PathString): FileOrDirectoryRef {
+		return if (FilePath.from(path).exists()) FileRef.fromPath(path)
+		else if (DirectoryPath.from(path).exists()) DirectoryRef.fromPath(path)
+		else throw 'File or directory not found: $path';
+	}
+
+	/**
 		Unifies `this` to a file path.
 		@param defaultRelativePath Used if `this` is `Directory`.
 	**/
