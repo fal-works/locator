@@ -22,7 +22,7 @@ abstract DirectoryList(Data) from Data to Data {
 	/**
 		@return New list of directory names.
 	**/
-	public inline function names(): Array<String>
+	public inline function getNames(): Array<String>
 		return this.map(directory -> directory.getName());
 
 	/**

@@ -22,7 +22,7 @@ abstract FileList(Data) from Data to Data {
 	/**
 		@return New list of file names without directory paths.
 	**/
-	public inline function names(): Array<String>
+	public inline function getNames(): Array<String>
 		return this.map(file -> file.getName());
 
 	/**
