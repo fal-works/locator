@@ -91,6 +91,19 @@ abstract FileOrDirectoryPath(Data) from Data to Data {
 		return this;
 
 	/**
+		Creates a relative path string of this from reference.
+		@see `FilePath.toRelative()`
+		@see `DirectoryPath.toRelative()`
+		@param reference If not provided, the current working directory is used.
+	**/
+	public inline function toRelative(?reference: DirectoryPath, maxDepth = 2): String {
+		return switch this {
+			case File(path): path.toRelative(reference, maxDepth);
+			case Directory(path): path.toRelative(reference, maxDepth);
+		}
+	}
+
+	/**
 		Returns a `String` that can be used as a single command line argument.
 
 		@param targetCli If provided, checks if `this` matches the target CLI and throws error if not.
