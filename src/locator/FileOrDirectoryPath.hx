@@ -40,6 +40,26 @@ abstract FileOrDirectoryPath(Data) from Data to Data {
 		return Directory(path);
 
 	/**
+		@return `String` representation of `this`.
+	**/
+	@:to public inline function toString(): String {
+		return switch this {
+			case File(path): path.toString();
+			case Directory(path): path.toString();
+		}
+	}
+
+	/**
+		@return The name of the file/directory specified by `this` path.
+	**/
+	public extern inline function getName(): String {
+		return switch this {
+			case File(path): path.getName();
+			case Directory(path): path.getName();
+		}
+	}
+
+	/**
 		Unifies `this` to a file path.
 		@param defaultRelativePath Used if `this` is `Directory`.
 	**/

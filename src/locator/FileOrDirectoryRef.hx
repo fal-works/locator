@@ -46,6 +46,26 @@ abstract FileOrDirectoryRef(Data) from Data to Data {
 		return Directory(ref);
 
 	/**
+		@return `String` representation of `this`.
+	**/
+	@:to public inline function toString(): String {
+		return switch this {
+			case File(ref): ref.toString();
+			case Directory(ref): ref.toString();
+		}
+	}
+
+	/**
+		@return The name of the file/directory specified by `this` path.
+	**/
+	public extern inline function getName(): String {
+		return switch this {
+			case File(ref): ref.getName();
+			case Directory(ref): ref.getName();
+		}
+	}
+
+	/**
 		Converts `path` to `FileOrDirectoryRef`.
 		Throws error if neither a file nor a directory is found.
 	**/
