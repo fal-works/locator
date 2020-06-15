@@ -113,6 +113,26 @@ abstract DirectoryRef(DirectoryPath) {
 	}
 
 	/**
+		Copies `this` directory to `destinationPath` with all of its contents (recursively).
+		Overwrites the destination files if it already exist.
+		@param destinationPath The destination path.
+		Note that this is NOT the directory which should contain the copied directory,
+		but the directory itself after copied.
+		@return New `DirectoryRef` value for the destination directory.
+	**/
+	public inline function copy(
+		destinationPath: DirectoryPath
+	): DirectoryRef {
+		if (!destinationPath.exists()) destinationPath.createDirectory();
+
+		for (element in getContents()) switch element.toEnum() {
+			case File(ref): ref.copyTo(destinationPath, false);
+			case Directory(ref): ref.copy(destinationPath.concat(ref.getName()));
+		}
+		return new DirectoryRef(destinationPath);
+	}
+
+	/**
 		@return The path of `this` directory as `String`.
 	**/
 	public extern inline function toString(): String

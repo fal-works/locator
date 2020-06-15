@@ -49,5 +49,8 @@ class Main {
 					Sys.println('Dir: ${ref.getName()}');
 			}
 		}
+
+		// copy test
+		DirectoryRef.from("test/dir").copy("out/dirCopy");
 	}
 }
