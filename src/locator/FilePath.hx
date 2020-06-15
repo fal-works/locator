@@ -26,12 +26,11 @@ abstract FilePath(PathString) to String {
 	/**
 		Callback function for `FilePath.from(s: String)`.
 	**/
-	public static final fromStringCallback = (s: String) -> FilePath.from(s);
+	public static final fromStringCallback = (s: String) -> FilePath.fromString(s);
 
 	/**
 		Creates a new `FilePath` value.
 		Throws error if `pathString` ends with any file path delimiter.
-		@param pathString Either absolute or relative from the current working directory.
 	**/
 	@:from public static extern inline function from(pathString: PathString) {
 		#if !locator_validation_disable
@@ -39,6 +38,14 @@ abstract FilePath(PathString) to String {
 		#end
 		return new FilePath(pathString);
 	}
+
+	/**
+		Creates a new `FilePath` value.
+		Throws error if `s` ends with any file path delimiter.
+		@param s Any file path, either absolute or relative from the current working directory.
+	**/
+	@:from public static extern inline function fromString(s: String): FilePath
+		return from(s);
 
 	/**
 		@return `a` if it exists. Otherwise `b`.

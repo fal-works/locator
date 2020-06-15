@@ -30,11 +30,17 @@ abstract DirectoryPath(PathString) to String {
 
 	/**
 		Creates a new `DirectoryPath` value.
-		@param pathString If not provided, returns the current working directory.
 	**/
-	@:from public static extern inline function from(pathString: PathString) {
+	@:from public static extern inline function from(pathString: PathString): DirectoryPath {
 		return new DirectoryPath(pathString.addTrailingDelimiter());
 	}
+
+	/**
+		Creates a new `DirectoryPath` value.
+		@param s Any directory path, either absolute or relative from the current working directory.
+	**/
+	@:from public static extern inline function fromString(s: String): DirectoryPath
+		return from(s);
 
 	/**
 		@return New `DirectoryPath` value from the current working directory.
