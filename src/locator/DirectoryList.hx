@@ -29,10 +29,14 @@ abstract DirectoryList(Data) from Data to Data {
 		Copies all directories in `this` list to `destination` with the same directory names,
 		with all of their contents (recursively).
 		Overwrites destination files if they already exist.
+		@return New list of directories after copied.
 	**/
-	public inline function copyTo(destinationPath: DirectoryPath): Void {
+	public inline function copyTo(destinationPath: DirectoryPath): DirectoryList {
+		final newDirectories: DirectoryList = [];
 		for (i in 0...this.length)
-			this[i].copyTo(destinationPath);
+			newDirectories.push(this[i].copyTo(destinationPath));
+
+		return newDirectories;
 	}
 
 	/**

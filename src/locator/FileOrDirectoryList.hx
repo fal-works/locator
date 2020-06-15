@@ -74,10 +74,14 @@ abstract FileOrDirectoryList(Data) from Data to Data {
 	/**
 		Copies all contents in `this` list to `destination` with the same names (recursively).
 		Overwrites destination files if they already exist.
+		@return New list of files/directories after copied.
 	**/
-	public inline function copyTo(destinationPath: DirectoryPath): Void {
+	public inline function copyTo(destinationPath: DirectoryPath): FileOrDirectoryList {
+		final newRefs: FileOrDirectoryList = [];
 		for (i in 0...this.length)
-			this[i].copyTo(destinationPath);
+			newRefs.push(this[i].copyTo(destinationPath));
+
+		return newRefs;
 	}
 }
 
@@ -86,11 +90,13 @@ private typedef FilesAndDirectories = {
 	final files: FileList;
 	final directories: DirectoryList;
 };
+
 #else
 @:structInit
 private class FilesAndDirectories {
 	public final files: FileList;
 	public final directories: DirectoryList;
+
 	public function new(files: FileList, directories: DirectoryList) {
 		this.files = files;
 		this.directories = directories;

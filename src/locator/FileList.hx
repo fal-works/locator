@@ -29,18 +29,23 @@ abstract FileList(Data) from Data to Data {
 		Copies all files in `this` list to `destination` with the same file names.
 		Overwrites destination files if they already exist.
 		@param prepareDirectory If `true`, creates the destination directory if absent.
+		@return New list of files after copied.
 	**/
+	@:access(locator.FileRef)
 	public inline function copyTo(
 		destinationPath: DirectoryPath,
 		prepareDirectory = true
-	): Void {
+	): FileList {
 		if (prepareDirectory && !destinationPath.exists())
 			destinationPath.createDirectory();
 
+		final newFiles: FileList = [];
 		for (i in 0...this.length) {
 			final file = this[i];
 			final destinationFilePath = destinationPath.makeFilePath(file.getName());
 			File.copy(file.path, destinationFilePath);
+			newFiles.push(new FileRef(destinationFilePath));
 		}
+		return newFiles;
 	}
 }
