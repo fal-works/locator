@@ -4,9 +4,9 @@
 	"license": "MIT",
 	"tags": ["utility", "sys"],
 	"description": "File system utility.",
-	"version": "0.4.0-alpha",
+	"version": "0.4.0",
 	"classPath": "src/",
-	"releasenote": "Fix bugs. Add some methods. Change compiler flags.",
+	"releasenote": "Add several types and methods.",
 	"contributors": [
 		"fal-works"
 	],
