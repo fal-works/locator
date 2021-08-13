@@ -17,7 +17,7 @@ import greeter.Cli;
 	toPathObject,
 	toString
 )
-abstract DirectoryPath(PathString) to String {
+abstract DirectoryPath(PathString) to PathString to String {
 	/**
 		Callback function for `DirectoryPath.from()`.
 	**/

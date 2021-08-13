@@ -7,3 +7,4 @@ import sinker.*;
 
 using StringTools;
 using sinker.extensions.Index;
+using locator.internal.StringExtension;

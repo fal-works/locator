@@ -40,7 +40,7 @@ abstract PathString(String) to String {
 			absolutePath = formatAbsoluteDos(absolutePath);
 		}
 
-		if (hasLastDelimiter && absolutePath.lastCharCode() != mode.delimiterCode)
+		if (hasLastDelimiter && !absolutePath.endsWithCharCode(mode.delimiterCode))
 			absolutePath += mode.delimiter;
 
 		return new PathString(absolutePath);
@@ -162,7 +162,7 @@ abstract PathString(String) to String {
 		@return `true` if `this` ends with a path delimiter.
 	**/
 	public extern inline function endsWithDelimiter(): Bool
-		return this.lastCharCode() == getMode().delimiterCode;
+		return this.charCodeAt(this.length - 1) == getMode().delimiterCode;
 
 	/**
 		@return `this` if it has already a trailing delimiter.
@@ -170,7 +170,7 @@ abstract PathString(String) to String {
 	**/
 	public extern inline function addTrailingDelimiter(): PathString {
 		final mode = getMode();
-		return if (this.lastCharCode() == mode.delimiterCode) this else {
+		return if (this.charCodeAt(this.length - 1) == mode.delimiterCode) this else {
 			new PathString(this + mode.delimiter);
 		};
 	}

@@ -13,6 +13,9 @@ abstract DirectoryList(Data) from Data to Data {
 	public static extern inline function from(array: Data): DirectoryList
 		return array;
 
+	@:from static extern inline function fromStdArray(array: std.Array<DirectoryRef>): DirectoryList
+		return from(array);
+
 	/**
 		Casts `this` to `Array<DirectoryRef>` explicitly.
 	**/

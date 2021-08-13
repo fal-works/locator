@@ -13,6 +13,9 @@ abstract FileList(Data) from Data to Data {
 	public static extern inline function from(array: Data): FileList
 		return array;
 
+	@:from static extern inline function fromStdArray(array: std.Array<FileRef>): FileList
+		return from(array);
+
 	/**
 		Casts `this` to `Array<FileRef>` explicitly.
 	**/
