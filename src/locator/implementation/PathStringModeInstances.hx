@@ -4,7 +4,7 @@ import greeter.Cli;
 import greeter.CliType;
 
 /**
-	Set of `PathString` instances.
+	Set of `PathStringMode` instances.
 **/
 @:structInit
 @:access(locator.PathStringMode)
