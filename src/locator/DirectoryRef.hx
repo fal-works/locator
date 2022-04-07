@@ -31,6 +31,12 @@ abstract DirectoryRef(DirectoryPath) {
 	}
 
 	/**
+		Creates a `DirectoryRef` value without checking if the directory exists and is accessible.
+	**/
+	public static extern inline function fromPathUnsafe(path: DirectoryPath)
+		return new DirectoryRef(path);
+
+	/**
 		Creates a `DirectoryRef` value from a string.
 		Throws error if the directory does not exist.
 	**/
@@ -109,7 +115,7 @@ abstract DirectoryRef(DirectoryPath) {
 	**/
 	public inline function getContents(): FileOrDirectoryList {
 		return FileSystem.readDirectory(this)
-			.map(name -> FileOrDirectoryRef.fromPath(this + name));
+			.map(name -> FileOrDirectoryRef.fromPathUnsafe(this + name));
 	}
 
 	/**
@@ -120,9 +126,7 @@ abstract DirectoryRef(DirectoryPath) {
 		but the directory itself after copied.
 		@return New `DirectoryRef` value for the destination directory.
 	**/
-	public inline function copy(
-		destinationPath: DirectoryPath
-	): DirectoryRef {
+	public inline function copy(destinationPath: DirectoryPath): DirectoryRef {
 		if (!destinationPath.exists()) destinationPath.createDirectory();
 
 		for (element in getContents()) switch element.toEnum() {
@@ -131,6 +135,7 @@ abstract DirectoryRef(DirectoryPath) {
 		}
 		return new DirectoryRef(destinationPath);
 	}
+
 	/**
 		Copies `this` directory to `destinationPath` with the same directory name and
 		with all of its contents (recursively).
@@ -139,9 +144,7 @@ abstract DirectoryRef(DirectoryPath) {
 		Unlike `copy()`, this is the directory which should contain the copied directory.
 		@return New `DirectoryRef` value for the destination directory.
 	**/
-	public inline function copyTo(
-		destinationPath: DirectoryPath
-	): DirectoryRef {
+	public inline function copyTo(destinationPath: DirectoryPath): DirectoryRef {
 		return copy(destinationPath.concat(this.getName()));
 	}
 

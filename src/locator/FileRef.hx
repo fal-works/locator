@@ -29,6 +29,12 @@ abstract FileRef(FilePath) {
 	}
 
 	/**
+		Creates a `FileRef` value without checking if the file exists.
+	**/
+	public static extern inline function fromPathUnsafe(path: FilePath): FileRef
+		return new FileRef(path);
+
+	/**
 		Creates a `FileRef` value from a string.
 		Throws error if the file does not exist.
 	**/

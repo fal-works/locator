@@ -91,6 +91,18 @@ abstract FileOrDirectoryRef(Data) from Data to Data {
 	}
 
 	/**
+		Converts `path` to `FileOrDirectoryRef`
+		without checking if the file or directory exists and is accessible.
+	**/
+	@:from public static function fromPathUnsafe(path: PathString): FileOrDirectoryRef {
+		return if (FileSystem.isDirectory(path)) {
+			DirectoryRef.fromPathUnsafe(path);
+		} else {
+			FileRef.fromPathUnsafe(path);
+		}
+	}
+
+	/**
 		Unifies `this` to a file path.
 		@param defaultRelativePath Used if `this` is `Directory`.
 	**/
