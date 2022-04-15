@@ -179,7 +179,7 @@ abstract DirectoryPath(PathString) to String {
 		var nextRelPath = relativeCurrent(relPath, dos);
 
 		if (nextRelPath.isSome())
-			return DirectoryPath.from(refDirPath + nextRelPath.unwrap());
+			return PathString.from(refDirPath + nextRelPath.unwrap()).addTrailingDelimiter();
 
 		nextRelPath = relativeParent(relPath, dos);
 		while (nextRelPath.isSome()) {
