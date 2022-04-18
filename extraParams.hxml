@@ -1,4 +1,2 @@
-# Default parameters for haxelib
-
 --library sinker
 --library greeter
