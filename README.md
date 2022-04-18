@@ -4,7 +4,7 @@ File system utility for Haxe.
 
 Requires **Haxe 4**. Only for `sys` targets.
 
-(Tested with: Haxe 4.1.1, `eval`/`hl`. Some methods are not available on `java`).
+(Tested with: Haxe 4.2.5, `eval`/`hl`. Some methods are not available on `java`).
 
 ## Types
 
@@ -35,7 +35,7 @@ The path is automatically converted to absolute when creating any value of the t
 
 ## Dependencies
 
-- [sinker](https://github.com/fal-works/sinker) v0.3.0 or compatible
+- [sinker](https://github.com/fal-works/sinker) v0.6.0 or compatible
 - [greeter](https://github.com/fal-works/greeter) v0.1.0 or compatible
 
 See also:
