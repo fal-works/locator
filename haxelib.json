@@ -2,11 +2,14 @@
 	"name": "locator",
 	"url": "https://github.com/fal-works/locator/",
 	"license": "Apache",
-	"tags": ["utility", "sys"],
+	"tags": [
+		"utility",
+		"sys"
+	],
 	"description": "File system utility.",
-	"version": "0.4.0",
+	"version": "0.5.0",
 	"classPath": "src/",
-	"releasenote": "Add several types and methods.",
+	"releasenote": "Fixed transitive casts to support Haxe 4.2. Added some methods.",
 	"contributors": [
 		"fal-works"
 	],
