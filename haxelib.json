@@ -1,7 +1,7 @@
 {
 	"name": "locator",
 	"url": "https://github.com/fal-works/locator/",
-	"license": "MIT",
+	"license": "Apache",
 	"tags": ["utility", "sys"],
 	"description": "File system utility.",
 	"version": "0.4.0",
