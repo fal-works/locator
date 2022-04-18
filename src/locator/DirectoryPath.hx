@@ -31,7 +31,9 @@ abstract DirectoryPath(PathString) to PathString to String {
 	/**
 		Creates a new `DirectoryPath` value.
 	**/
-	@:from public static extern inline function from(pathString: PathString): DirectoryPath {
+	@:from public static extern inline function from(
+		pathString: PathString
+	): DirectoryPath {
 		return new DirectoryPath(pathString.addTrailingDelimiter());
 	}
 

@@ -4,7 +4,13 @@ package locator;
 	Value referring to an existing file.
 **/
 @:notNull
-@:forward(toString, getParentPath, getName, getExtension, getNameWithoutExtension)
+@:forward(
+	toString,
+	getParentPath,
+	getName,
+	getExtension,
+	getNameWithoutExtension
+)
 abstract FileRef(FilePath) {
 	/**
 		Callback function for `FileRef.from()`.
