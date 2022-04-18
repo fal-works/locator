@@ -5,7 +5,7 @@ private typedef Data = Array<FileRef>;
 /**
 	Array of `FileRef`.
 **/
-@:notNull @:forward
+@:notNull @:forward @:transitive
 abstract FileList(Data) from Data to Data {
 	/**
 		Casts `Array<FileRef>` to `FileList` explicitly.

@@ -5,7 +5,7 @@ private typedef Data = Array<DirectoryRef>;
 /**
 	Array of `DirectoryRef`.
 **/
-@:notNull @:forward
+@:notNull @:forward @:transitive
 abstract DirectoryList(Data) from Data to Data {
 	/**
 		Casts `Array<DirectoryRef>` to `DirectoryList` explicitly.
