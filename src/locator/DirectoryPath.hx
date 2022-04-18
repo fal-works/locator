@@ -119,7 +119,7 @@ abstract DirectoryPath(PathString) to PathString to String {
 		return FilePath.from(concatPath(relPath));
 
 	/**
-		Finds the actual directory.
+		Finds the actual directory. Throws error if the file does not exist.
 	**/
 	public extern inline function find(): DirectoryRef
 		return DirectoryRef.from(this);

@@ -54,7 +54,7 @@ abstract FilePath(PathString) to PathString to String {
 		return if (a.exists()) a else b;
 
 	/**
-		Finds the actual file.
+		Finds the actual file. Throws error if the file does not exist.
 	**/
 	public extern inline function find(): FileRef
 		return FileRef.fromPath(this);
